@@ -15,11 +15,16 @@ class MyApp extends StatelessWidget {
       home: const LoginPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: AppColor.primary,
-          appBarTheme: AppBarTheme(color: AppColor.secondary),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.secondary),),),
+        scaffoldBackgroundColor: AppColor.primary,
+        appBarTheme: AppBarTheme(color: AppColor.secondary),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.secondary),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: AppColor.secondary),
+        ),
+        
+      ),
     );
   }
 }
