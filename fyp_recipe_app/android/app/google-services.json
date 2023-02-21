@@ -29,6 +29,13 @@
             {
               "client_id": "553761314306-ml5p678cfqfcssl62u3v5771ueo7bvas.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "553761314306-9l19i7cf3hpp85o8lh4ipskerqsre2dk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fypRecipeApp"
+              }
             }
           ]
         }

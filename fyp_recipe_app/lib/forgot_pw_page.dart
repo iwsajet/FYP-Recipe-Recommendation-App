@@ -10,6 +10,20 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmpwController;
+  var _isObscured;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmpwController = TextEditingController();
+    _isObscured = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,58 +40,80 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: Form(
-              child: Column(
-            children: [
-              Container(
-                // alignment: Alignment.center,
-                child: const Text(
-                  "Forgot Password",
-                  style: TextStyle(
-                    color: AppColor.textColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            child: Column(
+              children: [
+                Container(
+                  // alignment: Alignment.center,
+                  child: const Text(
+                    "Forgot Password",
+                    style: TextStyle(
+                      color: AppColor.textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: AppColor.secondary)),
-                      labelText: 'Email',
-                      hintText: 'Enter valid email id as abc@gmail.com'),
+                Container(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColor.secondary)),
+                        labelText: 'Email',
+                        hintText: 'Enter valid email id as abc@gmail.com'),
+                  ),
                 ),
-              ),
-              Container(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: AppColor.secondary)),
-                      labelText: 'Password',
-                      hintText: 'Enter strong password'),
+                Container(
+                  child: TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                            icon: _isObscured
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off)),
+                        enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColor.secondary)),
+                        labelText: 'Password',
+                        hintText: 'Enter strong password'),
+                  ),
                 ),
-              ),
-              Container(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: AppColor.secondary)),
-                      labelText: 'Confirm Password',
-                      hintText: 'Confirm Password'),
+                Container(
+                  child: TextFormField(
+                    controller: _confirmpwController,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                            icon: _isObscured
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off)),
+                        enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2, color: AppColor.secondary)),
+                        labelText: 'Confirm Password',
+                        hintText: 'Confirm Password'),
+                  ),
                 ),
-              ),
-              Container(
-                child: ElevatedButton(
-                  child: const Text("Change Password"),
-                  onPressed: () {},
+                Container(
+                  child: ElevatedButton(
+                    child: const Text("Change Password"),
+                    onPressed: () {},
+                  ),
                 ),
-              ),
-            ],
-          ),),
+              ],
+            ),
+          ),
         ),
       ),
     );

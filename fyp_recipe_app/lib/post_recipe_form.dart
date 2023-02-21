@@ -17,10 +17,10 @@ class _PostRecipeState extends State<PostRecipe> {
         child: Column(children: [
           Stack(
             children: [
-              TopBar(),
+              const TopBar(),
               Container(
                 padding: const EdgeInsets.all(30),
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: 120,
                 ),
                 height: MediaQuery.of(context).size.height / 1.8,
@@ -44,7 +44,36 @@ class _PostRecipeState extends State<PostRecipe> {
                           alignment: Alignment.center,
                         ),
                       ),
-                      Container()
+                      Container(
+                          child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Ingredients",
+                        ),
+                      )),
+                      Container(
+                          child: TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: "Description"),
+                      )),
+                      Container(
+                        child: TextFormField(
+                          decoration:
+                              const InputDecoration(labelText: "Instructions"),
+                        ),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: "Preparation time",
+                              hintText: "Rough estimate on preparation time"),
+                        ),
+                      ),
+                      Container(
+                        child: ElevatedButton(
+                          child: const Text("Post"),
+                          onPressed: () {},
+                        ),
+                      )
                     ],
                   ),
                 ),

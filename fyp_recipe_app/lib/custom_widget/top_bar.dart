@@ -9,7 +9,7 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
                   height: MediaQuery.of(context).size.height / 4,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColor.secondary,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(40),
