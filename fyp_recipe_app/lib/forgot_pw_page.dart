@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 import 'app_properties.dart';
 
@@ -18,10 +20,45 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   void initState() {
     _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confirmpwController = TextEditingController();
+
     _isObscured = true;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+
+    super.dispose();
+  }
+
+  Future passwordReset() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailController.text);
+          showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text(
+              "Password reset email has been sent to your email, Please check."
+            ),
+          );
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(
+              e.message.toString(),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -63,52 +100,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 width: 2, color: AppColor.secondary)),
                         labelText: 'Email',
                         hintText: 'Enter valid email id as abc@gmail.com'),
-                  ),
-                ),
-                Container(
-                  child: TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                            icon: _isObscured
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off)),
-                        enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2, color: AppColor.secondary)),
-                        labelText: 'Password',
-                        hintText: 'Enter strong password'),
-                  ),
-                ),
-                Container(
-                  child: TextFormField(
-                    controller: _confirmpwController,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                            icon: _isObscured
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off)),
-                        enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2, color: AppColor.secondary)),
-                        labelText: 'Confirm Password',
-                        hintText: 'Confirm Password'),
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Required"),
+                      EmailValidator(errorText: "Not a Valid Email"),
+                    ]),
                   ),
                 ),
                 Container(
                   child: ElevatedButton(
-                    child: const Text("Change Password"),
-                    onPressed: () {},
+                    child: const Text("Reset Password"),
+                    onPressed: passwordReset,
                   ),
                 ),
               ],

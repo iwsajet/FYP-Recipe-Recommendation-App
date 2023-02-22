@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^4.2.8
   cloud_firestore: ^4.4.2
   form_field_validator: ^1.1.0
+  dotted_border: ^2.0.0+3
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
+import 'package:fyp_recipe_app/login_page.dart';
 import 'app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -58,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.only(
                       top: 120, left: AppSizes.s20, right: AppSizes.s20),
-                  height: MediaQuery.of(context).size.height / 1.8,
+                  height: MediaQuery.of(context).size.height / 1.3,
                   //width: MediaQuery.of(context).size.height / 2.5,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -184,6 +186,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                   email: _emailController.text,
                                   password: _passwordController.text,
                                 );
+                                final users = <String, dynamic>{
+                                  'Full Name': _fullnameController,
+                                  'email': _emailController,
+                                  'password': _passwordController,
+                                  'username': _usernameController,
+                                };
+                                FirebaseFirestore.instance
+                                    .collection('Users')
+                                    .doc()
+                                    .set(users)
+                                    .onError((e, _) =>
+                                        print("Error writing document: $e"));
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'weak-password') {
                                   print('The password provided is too weak.');
@@ -197,6 +211,18 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                           ),
                         ),
+                        Container(
+                          child: TextButton(
+                            child: const Text("Registered? Login Now."),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),

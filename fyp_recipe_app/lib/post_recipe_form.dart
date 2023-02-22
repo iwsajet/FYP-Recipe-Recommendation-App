@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'app_properties.dart';
@@ -10,6 +11,11 @@ class PostRecipe extends StatefulWidget {
 }
 
 class _PostRecipeState extends State<PostRecipe> {
+  late final TextEditingController _recipeName;
+  late final TextEditingController _ingredients;
+  late final TextEditingController _description;
+  late final TextEditingController _preparationTime;
+  late final TextEditingController _instructions;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,32 +52,61 @@ class _PostRecipeState extends State<PostRecipe> {
                       ),
                       Container(
                           child: TextFormField(
+                            controller: _recipeName,
                         decoration: const InputDecoration(
-                          labelText: "Ingredients",
+                          labelText: "Name",
                         ),
-                      )),
-                      Container(
-                          child: TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: "Description"),
-                      )),
+                      ),),
+                      
                       Container(
                         child: TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: "Instructions"),
+                          controller: _description,
+                            decoration:
+                                const InputDecoration(labelText: "Description"),
+                            maxLength: 300),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: _ingredients,
+                          decoration: const InputDecoration(
+                            labelText: "Ingredients",
+                          ),
+                          maxLength: 300,
                         ),
                       ),
                       Container(
                         child: TextFormField(
+                          controller: _preparationTime,
                           decoration: const InputDecoration(
                               labelText: "Preparation time",
                               hintText: "Rough estimate on preparation time"),
+                              
+                        ),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: _instructions,
+                          decoration:
+                              const InputDecoration(labelText: "Instructions"),
+                              maxLength: 300
                         ),
                       ),
                       Container(
                         child: ElevatedButton(
                           child: const Text("Post"),
-                          onPressed: () {},
+                          onPressed: () {
+                            final food = <String, String>{
+                              "name": "Samosha",
+                              "description": "lorem inpsm",
+                            };
+
+                            FirebaseFirestore.instance
+                                .collection("foods")
+                                .doc()
+                                .set(food)
+                                .onError((e, _) =>
+                                    print("Error writing document: $e"));
+                          },
                         ),
                       )
                     ],
