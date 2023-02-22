@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
-import 'app_properties.dart';
+
 
 class PostRecipe extends StatefulWidget {
   const PostRecipe({super.key});
@@ -95,13 +95,16 @@ class _PostRecipeState extends State<PostRecipe> {
                         child: ElevatedButton(
                           child: const Text("Post"),
                           onPressed: () {
-                            final food = <String, String>{
-                              "name": "Samosha",
-                              "description": "lorem inpsm",
+                            final food = <String, dynamic>{
+                              "name": _recipeName,
+                              "description": _description,
+                              "ingredients": _ingredients,
+                              "preparation time": _preparationTime,
+                              "instructions": _instructions
                             };
 
                             FirebaseFirestore.instance
-                                .collection("foods")
+                                .collection("Recipes")
                                 .doc()
                                 .set(food)
                                 .onError((e, _) =>
