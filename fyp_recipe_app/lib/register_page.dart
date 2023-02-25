@@ -41,6 +41,14 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  bool passwordConfirmed() {
+    if (_passwordController.text == _confirmpwController.text) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -181,23 +189,34 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: const Text("Register"),
                             onPressed: () async {
                               try {
-                                final credential = await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
+                                if (passwordConfirmed()) {
+                                  final credential = await FirebaseAuth.instance
+                                      .createUserWithEmailAndPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
+
+                                  final users = <String, dynamic>{
+                                    'Full Name': _fullnameController.text,
+                                    'email': _emailController.text,
+                                    'password': _passwordController.text,
+                                    'username': _usernameController.text,
+                                  };
+                                  // FirebaseFirestore.instance
+                                  //     .collection('Users')
+                                  //     .add(users);
+                                  FirebaseFirestore.instance
+                                      .collection('Users')
+                                      .doc()
+                                      .set(users)
+                                      .onError((e, _) =>
+                                          print("Error writing document: $e"));
+                                }
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginPage(),
+                                  ),
                                 );
-                                final users = <String, dynamic>{
-                                  'Full Name': _fullnameController,
-                                  'email': _emailController,
-                                  'password': _passwordController,
-                                  'username': _usernameController,
-                                };
-                                FirebaseFirestore.instance
-                                    .collection('Users')
-                                    .doc()
-                                    .set(users)
-                                    .onError((e, _) =>
-                                        print("Error writing document: $e"));
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'weak-password') {
                                   print('The password provided is too weak.');
@@ -213,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         Container(
                           child: TextButton(
-                            child: const Text("Registered? Login Now."),
+                            child: const Text("Already Registered? Login Now."),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
