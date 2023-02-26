@@ -42,6 +42,7 @@ dependencies:
   form_field_validator: ^1.1.0
   dotted_border: ^2.0.0+3
   firebase_storage: ^11.0.14
+  provider: ^6.0.5
   
 
 dev_dependencies:

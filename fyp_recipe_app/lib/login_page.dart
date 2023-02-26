@@ -6,6 +6,7 @@ import 'package:fyp_recipe_app/forgot_pw_page.dart';
 import 'package:fyp_recipe_app/home_page.dart';
 import 'package:fyp_recipe_app/register_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:fyp_recipe_app/services/login_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   var _isObscured;
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Stack(
               children: [
-                const TopBar(),
+                const TopBar(title: "Wlecome !",),
                 Container(
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.only(
@@ -198,4 +200,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+//   void signUp_user() {
+//   FirebaseSignInMethod(FirebaseAuth.instance).signInWithEmail(
+//     email: _emailController.text,
+//     password: _passwordController.text,
+//     context: context,
+//   );
+// }
 }

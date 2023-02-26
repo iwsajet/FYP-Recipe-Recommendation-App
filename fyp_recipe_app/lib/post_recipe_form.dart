@@ -44,7 +44,9 @@ class _PostRecipeState extends State<PostRecipe> {
         child: Column(children: [
           Stack(
             children: [
-              const TopBar(),
+              const TopBar(
+                title: "Share your recipe",
+              ),
               Container(
                 padding: const EdgeInsets.all(30),
                 margin: const EdgeInsets.only(

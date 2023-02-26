@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
+import 'package:fyp_recipe_app/home_page.dart';
 import 'package:fyp_recipe_app/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: AppColor.primary,
-        appBarTheme: AppBarTheme(color: AppColor.secondary),
+        appBarTheme: const AppBarTheme(color: AppColor.secondary),
+        //bottomAppBarTheme: const BottomAppBarTheme(color: AppColor.secondary),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.secondary),
         ),
