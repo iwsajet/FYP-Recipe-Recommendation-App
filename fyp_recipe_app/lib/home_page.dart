@@ -20,105 +20,79 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: const BottomNavBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
-        child: Column(
-
-            //   slivers: [
-            // SliverToBoxAdapter(
-            children: [
-              Container(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Search',
-                    suffixIcon: Icon(Icons.search),
-                  ),
-                ),
+        child: Column(children: [
+          TopBar(
+            title: 'Browse for some recipes',
+          ),
+          Container(
+            child: TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                suffixIcon: Icon(Icons.search),
               ),
-              SizedBox(
-                height: 200,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+            ),
+          ),
+          SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                // HomePageCards(
+                //     title: "Recommended", assets: 'assets/icons/ratings.png')
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Image(image: AssetImage('assets/icons/ratings.png')),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Image(image: AssetImage('assets/icons/ratings.png')),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+              child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Image(
-                        image: NetworkImage(
-                          'https://cdn.dribbble.com/users/86429/screenshots/7896133/media/a21c84e96e37754d3e8e25ed92011fc5.png',
-                        ),
+                    Image(
+                      image: NetworkImage(
+                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Image(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Image(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
-                        ),
-                      ),
-                    ),
+                    Text("data")
                   ],
                 ),
-              ),
-              SizedBox(
-                  child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Image(
-                          image: NetworkImage(
-                            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
-                          ),
-                        ),
-                        Text("data")
-                      ],
-                    ),
-                  )
-                ],
-              ))
-            ]
-            // )),
-            // SliverToBoxAdapter(
-            //   child: ListView(
-            //     scrollDirection: Axis.horizontal,
-            //     children: [
-            //       Image(height: 30,
-            //       width: 30,
-            //         image: NetworkImage(
-            //             'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80', ),
-            //       ),
-            //       Image(
-            //         height: 30,
-            //       width: 30,
-            //         image: NetworkImage(
-            //             'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'),
-            //       ),
-            //        Image(height: 30,
-            //       width: 30,
-            //         image: NetworkImage(
-            //             'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80', ),
-            //       ),
-            //       Image(
-            //         height: 30,
-            //       width: 30,
-            //         image: NetworkImage(
-            //             'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'),
-            //       ),
-            //     ],
-            //   ),
-            // )
-            //   ],
-            // )
-            ),
+              )
+            ],
+          ))
+        ]),
       ),
+    );
+  }
+}
+
+class HomePageCards extends StatelessWidget {
+  const HomePageCards({super.key, required this.title, required this.assets});
+  final String title;
+  final String assets;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      height: 20,
+      width: 30,
+      child: Row(children: [
+        Image(
+          image: AssetImage(
+            assets,
+          ),
+        ),
+        Text(title)
+      ]),
     );
   }
 }

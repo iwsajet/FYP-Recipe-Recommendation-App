@@ -12,6 +12,22 @@ class _RecipePageState extends State<RecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //dish image
+            Container(),
+            //recipe name, posted by, description
+            Container(),
+            // rating
+            Container(),
+            //prepatation time serving size ingredients
+            Container(),
+            //instruction
+            Container(),
+            //comments
+            Container()
+          ],
+        ),
 
       )
     );

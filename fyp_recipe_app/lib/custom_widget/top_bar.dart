@@ -8,14 +8,22 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  decoration: const BoxDecoration(
-                    color: AppColor.secondary,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40),
-                    ),
-                  ),
-                );
+      height: MediaQuery.of(context).size.height / 4,
+      decoration: const BoxDecoration(
+        color: AppColor.secondary,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40),
+        ),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        child: Text(
+          title,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 }
