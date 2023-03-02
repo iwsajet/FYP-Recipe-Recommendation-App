@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PostRecipe extends StatefulWidget {
   const PostRecipe({super.key});
@@ -16,6 +19,22 @@ class _PostRecipeState extends State<PostRecipe> {
   late final TextEditingController _description;
   late final TextEditingController _preparationTime;
   late final TextEditingController _instructions;
+
+  File? pickedImage;
+  Future pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(
+        () {
+          pickedImage = tempImage;
+        },
+      );
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
   @override
   void initState() {
@@ -68,19 +87,32 @@ class _PostRecipeState extends State<PostRecipe> {
                           color: Colors.white,
                         ),
                         child: DottedBorder(
-                            color: Colors.grey,
-                            strokeWidth: 3,
-                            dashPattern: const [10, 6],
-                            child: Container(
-                              height: 180,
-                              width: double.infinity,
-                              child: IconButton(
-                                icon: const Icon(Icons.camera_alt_outlined),
-                                onPressed: () {},
-                                alignment: Alignment.center,
-                              ),
-                            )),
+                          color: Colors.grey,
+                          strokeWidth: 3,
+                          dashPattern: const [10, 6],
+                          child: Container(
+                            height: 180,
+                            width: double.infinity,
+                            child: pickedImage != null
+                                ? Image.file(pickedImage!)
+                                : IconButton(
+                                    icon: const Icon(Icons.camera_alt_outlined),
+                                    onPressed: () {
+                                      pickImage(ImageSource.camera);
+                                    },
+                                    alignment: Alignment.center,
+                                  ),
+                          ),
+                        ),
                       ),
+                      Container(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            child: Text("choose image from gallary?"),
+                            onPressed: () {
+                              pickImage(ImageSource.gallery);
+                            },
+                          )),
                       Container(
                         child: TextFormField(
                           controller: _recipeName,

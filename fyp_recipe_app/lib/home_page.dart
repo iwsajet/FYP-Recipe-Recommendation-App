@@ -38,37 +38,37 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               children: [
                 // HomePageCards(
-                //     title: "Recommended", assets: 'assets/icons/ratings.png')
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Image(image: AssetImage('assets/icons/ratings.png')),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Image(image: AssetImage('assets/icons/ratings.png')),
-                )
+                //     title: "Recommended", assets: 'assets/icons/ratings.png'),
+                // Padding(
+                //   padding: EdgeInsets.all(20),
+                //   child: Image(image: AssetImage('assets/icons/ratings.png')),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.all(20),
+                //   child: Image(image: AssetImage('assets/icons/ratings.png')),
+                // )
               ],
             ),
           ),
-          SizedBox(
-              child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Image(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
-                      ),
-                    ),
-                    Text("data")
-                  ],
-                ),
-              )
-            ],
-          ))
+          // SizedBox(
+          //     child: ListView(
+          //   scrollDirection: Axis.horizontal,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.all(20),
+          //       child: Row(
+          //         children: [
+          //           Image(
+          //             image: NetworkImage(
+          //               'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80',
+          //             ),
+          //           ),
+          //           Text("data")
+          //         ],
+          //       ),
+          //     )
+          //   ],
+          // ))
         ]),
       ),
     );
