@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
-import 'package:fyp_recipe_app/login_page.dart';
+import 'package:fyp_recipe_app/screens/login_page.dart';
 import 'package:fyp_recipe_app/services/register_service.dart';
-import 'app_properties.dart';
+import '../app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class RegisterPage extends StatefulWidget {

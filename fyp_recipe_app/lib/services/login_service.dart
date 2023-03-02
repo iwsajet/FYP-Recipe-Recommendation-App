@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../home_page.dart';
+import '../screens/home_page.dart';
 
 class FirebaseSignInMethod {
   late final FirebaseAuth _firebaseAuth;

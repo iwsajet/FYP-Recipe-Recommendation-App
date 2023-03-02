@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fyp_recipe_app/custom_widget/bottom_nav_bar.dart';
-import 'package:fyp_recipe_app/post_recipe_form.dart';
-import 'package:fyp_recipe_app/profile_page.dart';
+import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
+import 'package:fyp_recipe_app/screens/profile_page.dart';
 
-import 'custom_widget/top_bar.dart';
+import '../custom_widget/top_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

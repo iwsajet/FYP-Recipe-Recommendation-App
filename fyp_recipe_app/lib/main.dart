@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
-import 'package:fyp_recipe_app/home_page.dart';
-import 'package:fyp_recipe_app/login_page.dart';
+import 'package:fyp_recipe_app/screens/home_page.dart';
+import 'package:fyp_recipe_app/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fyp_recipe_app/post_recipe_form.dart';
+import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
 import 'firebase_options.dart';
 
 void main() async {
