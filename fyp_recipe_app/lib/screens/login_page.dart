@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
@@ -6,7 +5,6 @@ import 'package:fyp_recipe_app/screens/forgot_pw_page.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/register_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:fyp_recipe_app/services/login_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -54,7 +52,9 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Stack(
               children: [
-                const TopBar(title: "Wlecome !",),
+                const TopBar(
+                  title: "Wlecome !",
+                ),
                 Container(
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.only(
@@ -130,40 +130,15 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Container(
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(300, 50)),
                             child: const Text("Login"),
-                            onPressed: () async {
-                              try {
-                                final credential = await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                        email: _emailController.text,
-                                        password: _passwordController.text);
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()),
-                                    (route) => false);
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'user-not-found') {
-                                  print('No user found for that email.');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              "No user found for that email.")));
-                                } else if (e.code == 'wrong-password') {
-                                  print(
-                                      'Wrong password provided for that user.');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text(
-                                          "Wrong password provided for that user."),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
+                            onPressed: () async {},
                           ),
                         ),
                         TextButton(
@@ -200,11 +175,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-//   void signUp_user() {
-//   FirebaseSignInMethod(FirebaseAuth.instance).signInWithEmail(
-//     email: _emailController.text,
-//     password: _passwordController.text,
-//     context: context,
-//   );
-// }
 }

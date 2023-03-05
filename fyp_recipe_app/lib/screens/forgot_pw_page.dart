@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -13,8 +13,7 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-  late final TextEditingController _confirmpwController;
+
   var _isObscured;
 
   @override
@@ -32,34 +31,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     super.dispose();
   }
 
-  Future passwordReset() async {
-    try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: _emailController.text);
-          showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            content: Text(
-              "Password reset email has been sent to your email, Please check."
-            ),
-          );
-        },
-      );
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(
-              e.message.toString(),
-            ),
-          );
-        },
-      );
-    }
-  }
+  Future passwordReset() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +80,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 Container(
                   child: ElevatedButton(
-                    child: const Text("Reset Password"),
                     onPressed: passwordReset,
+                    child: const Text("Reset Password"),
                   ),
                 ),
               ],

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/bottom_nav_bar.dart';
 import 'package:fyp_recipe_app/custom_widget/profile_page_topbar.dart';
-import 'package:fyp_recipe_app/screens/home_page.dart';
-import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
-import '../app_properties.dart';
+
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -49,7 +47,7 @@ class _UserProfileState extends State<UserProfile>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
+                children: const [
                   Center(child: Text('Post tab content')),
                   Center(child: Text('Bookmark tab content')),
                 ],

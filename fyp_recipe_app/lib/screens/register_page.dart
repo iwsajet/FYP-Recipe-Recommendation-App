@@ -1,11 +1,6 @@
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:fyp_recipe_app/screens/login_page.dart';
-import 'package:fyp_recipe_app/services/register_service.dart';
 import '../app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -66,7 +61,9 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Stack(
               children: [
-                const TopBar(title: "SignUp Here.",),
+                const TopBar(
+                  title: "SignUp Here.",
+                ),
                 Container(
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.only(
@@ -187,51 +184,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                           ),
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Container(
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(300, 50)),
                             child: const Text("Register"),
-                            onPressed: () async {
-                              try {
-                                if (passwordConfirmed()) {
-                                  final credential = await FirebaseAuth.instance
-                                      .createUserWithEmailAndPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  );
-
-                                  final users = <String, dynamic>{
-                                    'Full Name': _fullnameController.text,
-                                    'email': _emailController.text,
-                                    'password': _passwordController.text,
-                                    'username': _usernameController.text,
-                                  };
-                                  // FirebaseFirestore.instance
-                                  //     .collection('Users')
-                                  //     .add(users);
-                                  FirebaseFirestore.instance
-                                      .collection('Users')
-                                      .doc()
-                                      .set(users)
-                                      .onError((e, _) =>
-                                          print("Error writing document: $e"));
-                                }
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
-                                  ),
-                                );
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'weak-password') {
-                                  print('The password provided is too weak.');
-                                } else if (e.code == 'email-already-in-use') {
-                                  print(
-                                      'The account already exists for that email.');
-                                }
-                              } catch (e) {
-                                print(e);
-                              }
-                            },
-                            //onTap:(){register_user()} 
+                            onPressed: () async {},
+                            //onTap:(){register_user()}
                           ),
                         ),
                         Container(
@@ -240,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
+                                  builder: (context) => const LoginPage(),
                                 ),
                               );
                             },
@@ -257,10 +219,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-//   void register_user(){
-//   FirebaseAuthMethod(FirebaseAuth.instance).signUpWithEmail(email: _emailController.text,
-//   password: _passwordController.text, context: context, fullname: _fullnameController.text,
-//   username: _usernameController.text 
-//   );
-// }
 }

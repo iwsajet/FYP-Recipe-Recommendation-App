@@ -18,7 +18,7 @@ class ProfileTopBar extends StatelessWidget {
         Align(
           alignment: Alignment.topCenter,
           child: Column(
-            children: [Text("Jane Doe"), Text('@janedoe')],
+            children: const [Text("Jane Doe"), Text('@janedoe')],
           ),
         )
       ],

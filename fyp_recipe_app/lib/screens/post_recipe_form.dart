@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
@@ -90,7 +88,7 @@ class _PostRecipeState extends State<PostRecipe> {
                           color: Colors.grey,
                           strokeWidth: 3,
                           dashPattern: const [10, 6],
-                          child: Container(
+                          child: SizedBox(
                             height: 180,
                             width: double.infinity,
                             child: pickedImage != null
@@ -108,7 +106,7 @@ class _PostRecipeState extends State<PostRecipe> {
                       Container(
                           alignment: Alignment.center,
                           child: TextButton(
-                            child: Text("choose image from gallary?"),
+                            child: const Text("choose image from gallary?"),
                             onPressed: () {
                               pickImage(ImageSource.gallery);
                             },
@@ -154,25 +152,10 @@ class _PostRecipeState extends State<PostRecipe> {
                       ),
                       Container(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(300, 50)),
                           child: const Text("Post"),
-                          onPressed: () {
-                            final food = <String, dynamic>{
-                              "name": _recipeName.text,
-                              "description": _description.text,
-                              "ingredients": [_ingredients.text],
-                              "preparation time": _preparationTime.text,
-                              "instructions": _instructions.text,
-                            };
-
-                            FirebaseFirestore.instance
-                                .collection("Recipes")
-                                .doc()
-                                .set(food)
-                                .onError((e, _) =>
-                                    print("Error writing document: $e"))
-                                .catchError((error) =>
-                                    print("Error adding food: $error"));
-                          },
+                          onPressed: () {},
                         ),
                       )
                     ],

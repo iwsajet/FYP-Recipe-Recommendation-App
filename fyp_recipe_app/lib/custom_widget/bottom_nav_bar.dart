@@ -1,7 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fyp_recipe_app/screens/profile_page.dart';
 
 import '../screens/home_page.dart';
@@ -59,11 +56,7 @@ class BottomNavBar extends StatelessWidget {
             const SizedBox(
               width: 50,
             ),
-            IconButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                },
-                icon: const Icon(Icons.logout)),
+            IconButton(onPressed: () async {}, icon: const Icon(Icons.logout)),
             const SizedBox(
               width: 20,
             ),
