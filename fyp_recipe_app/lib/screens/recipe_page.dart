@@ -20,6 +20,8 @@ class _RecipePageState extends State<RecipePage> {
           Container(),
           //recipe name, posted by, description
           Container(),
+          //ingredients
+          Container(),
           // rating
           Container(
             // implement the rating bar
@@ -49,7 +51,16 @@ class _RecipePageState extends State<RecipePage> {
           //instruction
           Container(),
           //comments
-          Container()
+          Container(
+              child: Column(children: [
+            Text("Comments"),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Share your comment',
+                suffixIcon: Icon(Icons.add_comment),
+              ),
+            ),
+          ]))
         ],
       ),
     ));
