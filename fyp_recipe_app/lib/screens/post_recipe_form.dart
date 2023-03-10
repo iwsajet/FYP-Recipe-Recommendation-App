@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,7 @@ class _PostRecipeState extends State<PostRecipe> {
   late final TextEditingController _description;
   late final TextEditingController _preparationTime;
   late final TextEditingController _instructions;
+  late final TextEditingController _ingredientsQuantity;
 
   File? pickedImage;
   Future pickImage(ImageSource imageType) async {
@@ -41,6 +43,7 @@ class _PostRecipeState extends State<PostRecipe> {
     _description = TextEditingController();
     _preparationTime = TextEditingController();
     _instructions = TextEditingController();
+    _ingredientsQuantity = TextEditingController();
     super.initState();
   }
 
@@ -126,14 +129,34 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const InputDecoration(labelText: "Description"),
                             maxLength: 300),
                       ),
-                      Container(
-                        child: TextFormField(
-                          controller: _ingredients,
-                          decoration: const InputDecoration(
-                            labelText: "Ingredients",
+                      Row(
+                        children: [
+                          Container(
+                            width: 100,
+                            child: TextFormField(
+                              controller: _ingredientsQuantity,
+                              decoration: const InputDecoration(
+                                labelText: "Quantity",
+                              ),
+                              maxLength: 80,
+                            ),
                           ),
-                          maxLength: 300,
-                        ),
+                          Container(
+                            width: 120,
+                            child: TextFormField(
+                              controller: _ingredients,
+                              decoration: const InputDecoration(
+                                labelText: "Ingredients",
+                              ),
+                              maxLength: 80,
+                            ),
+                          ),
+                          GestureDetector(
+                              child: IconButton(
+                            icon: const Icon(CupertinoIcons.add),
+                            onPressed: () {},
+                          )),
+                        ],
                       ),
                       Container(
                         child: TextFormField(

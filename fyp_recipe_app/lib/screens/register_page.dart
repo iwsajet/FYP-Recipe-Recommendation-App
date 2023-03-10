@@ -1,8 +1,15 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
+import 'package:fyp_recipe_app/provider/signup_provider.dart';
 import 'package:fyp_recipe_app/screens/login_page.dart';
+import 'package:provider/provider.dart';
 import '../app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+
+
+import '../models/user_model.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -48,14 +55,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+  UserModel user =
+      UserModel(email: '', password: '', fullname: '', username: '');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   iconTheme: const IconThemeData(
-      //     color: Colors.white,
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -101,17 +107,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                 hintText: 'Enter Full Name'),
                           ),
                         ),
-                        Container(
-                          child: TextFormField(
-                            controller: _usernameController,
-                            decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2, color: AppColor.secondary)),
-                                labelText: 'Username',
-                                hintText: 'Enter valid username'),
-                          ),
-                        ),
+                        // Container(
+                        //   child: TextFormField(
+                        //     controller: _usernameController,
+                        //     decoration: const InputDecoration(
+                        //         enabledBorder: UnderlineInputBorder(
+                        //             borderSide: BorderSide(
+                        //                 width: 2, color: AppColor.secondary)),
+                        //         labelText: 'Username',
+                        //         hintText: 'Enter valid username'),
+                        //   ),
+                        // ),
                         Container(
                           child: TextFormField(
                             controller: _emailController,
@@ -156,34 +162,34 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                           ),
                         ),
-                        Container(
-                          child: TextFormField(
-                            obscureText: _isObscured,
-                            controller: _confirmpwController,
-                            decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscured = !_isObscured;
-                                      });
-                                    },
-                                    icon: _isObscured
-                                        ? const Icon(Icons.visibility)
-                                        : const Icon(Icons.visibility_off)),
-                                enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2, color: AppColor.secondary)),
-                                labelText: 'Confirm Password',
-                                hintText: 'Confirm Password'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Required";
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                        ),
+                        // Container(
+                        //   child: TextFormField(
+                        //     obscureText: _isObscured,
+                        //     controller: _confirmpwController,
+                        //     decoration: InputDecoration(
+                        //         suffixIcon: IconButton(
+                        //             onPressed: () {
+                        //               setState(() {
+                        //                 _isObscured = !_isObscured;
+                        //               });
+                        //             },
+                        //             icon: _isObscured
+                        //                 ? const Icon(Icons.visibility)
+                        //                 : const Icon(Icons.visibility_off)),
+                        //         enabledBorder: const UnderlineInputBorder(
+                        //             borderSide: BorderSide(
+                        //                 width: 2, color: AppColor.secondary)),
+                        //         labelText: 'Confirm Password',
+                        //         hintText: 'Confirm Password'),
+                        //     validator: (value) {
+                        //       if (value!.isEmpty) {
+                        //         return "Required";
+                        //       } else {
+                        //         return null;
+                        //       }
+                        //     },
+                        //   ),
+                        // ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -192,7 +198,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(300, 50)),
                             child: const Text("Register"),
-                            onPressed: () async {},
+                            onPressed: () async {
+                              Provider.of<SignupProvider>(context,
+                                      listen: false)
+                                  .signUP(context);
+                            },
                             //onTap:(){register_user()}
                           ),
                         ),

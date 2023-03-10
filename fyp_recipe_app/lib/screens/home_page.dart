@@ -101,3 +101,12 @@ class HomePageCards extends StatelessWidget {
     );
   }
 }
+
+class RecipeTypeCard extends StatelessWidget {
+  const RecipeTypeCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

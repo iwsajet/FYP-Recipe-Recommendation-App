@@ -1,10 +1,17 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
+import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:fyp_recipe_app/screens/forgot_pw_page.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/register_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user_model.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -34,6 +41,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+ 
+
+  UserModel user = UserModel(email: '', password: '');
   void validate() {
     if (formkey.currentState!.validate()) {
       // ignore: avoid_print
@@ -53,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
             Stack(
               children: [
                 const TopBar(
-                  title: "Wlecome !",
+                  title: "Welcome !",
                 ),
                 Container(
                   padding: const EdgeInsets.all(30),
@@ -138,7 +148,11 @@ class _LoginPageState extends State<LoginPage> {
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(300, 50)),
                             child: const Text("Login"),
-                            onPressed: () async {},
+                            onPressed: () async {
+                               Provider.of<LoginProvider>(context,
+                                      listen: false)
+                                  .logIn(context);
+                            },
                           ),
                         ),
                         TextButton(
