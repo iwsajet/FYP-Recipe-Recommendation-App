@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:fyp_recipe_app/provider/signup_provider.dart';
@@ -8,8 +6,8 @@ import 'package:provider/provider.dart';
 import '../app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-
 import '../models/user_model.dart';
+import '../network/api_response.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -25,6 +23,16 @@ class _RegisterPageState extends State<RegisterPage> {
   late final TextEditingController _usernameController;
   late final TextEditingController _confirmpwController;
   var _isObscured;
+  late final SignUpProvider signUpProvider;
+
+  void signUpListner() {
+    if (signUpProvider.apiResponse.status == Status.error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(signUpProvider.apiResponse.error.toString())));
+    } else if (signUpProvider.apiResponse.status == Status.success) {
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   void initState() {
@@ -34,6 +42,8 @@ class _RegisterPageState extends State<RegisterPage> {
     _usernameController = TextEditingController();
     _confirmpwController = TextEditingController();
     _isObscured = true;
+    signUpProvider = context.read<SignUpProvider>();
+    signUpProvider.addListener(signUpListner);
     super.initState();
   }
 
@@ -43,6 +53,8 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _fullnameController.dispose();
     _usernameController.dispose();
+    signUpProvider.dispose();
+
     super.dispose();
   }
 
@@ -199,9 +211,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 fixedSize: const Size(300, 50)),
                             child: const Text("Register"),
                             onPressed: () async {
-                              Provider.of<SignupProvider>(context,
-                                      listen: false)
-                                  .signUP(context);
+                              context.read<SignUpProvider>().signUp(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
                             },
                             //onTap:(){register_user()}
                           ),

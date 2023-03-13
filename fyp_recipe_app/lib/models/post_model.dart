@@ -1,18 +1,26 @@
 import 'package:flutter/cupertino.dart';
 
-class PostModel {
-  String name;
-  String description;
-  String ingredients;
-  String preparationTime;
-  String instructions;
-  Image photo;
+import 'ingredient_model.dart';
 
-  PostModel(
-      {required this.name,
-      required this.description,
-      required this.ingredients,
-      required this.preparationTime,
-      required this.instructions,
-      required this.photo});
+class Users {
+  Users({
+    this.recipePic,
+    this.id,
+    required this.name,
+    required this.type,
+    required this.ingredients,
+    required this.instruction,
+    required this.preptime,
+    required this.imageUrl,
+    this.originalUrl,
+  });
+  Image? recipePic;
+  int? id;
+  String name;
+  String type;
+  List<Ingredient> ingredients;
+  List<String> instruction;
+  int preptime;
+  String imageUrl;
+  String? originalUrl;
 }

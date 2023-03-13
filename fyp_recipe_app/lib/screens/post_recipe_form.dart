@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_recipe_app/custom_widget/add_instructions.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../custom_widget/add_ingredient.dart';
+import '../models/ingredient_model.dart';
 
 class PostRecipe extends StatefulWidget {
   const PostRecipe({super.key});
@@ -14,12 +17,14 @@ class PostRecipe extends StatefulWidget {
 
 class _PostRecipeState extends State<PostRecipe> {
   late final TextEditingController _recipeName;
+  late final TextEditingController _recipeType;
   late final TextEditingController _ingredients;
   late final TextEditingController _description;
   late final TextEditingController _preparationTime;
   late final TextEditingController _instructions;
-  late final TextEditingController _ingredientsQuantity;
 
+  final List<Ingredient> _ingredientsList = [];
+  final List<String> _instructionList = [];
   File? pickedImage;
   Future pickImage(ImageSource imageType) async {
     try {
@@ -39,17 +44,20 @@ class _PostRecipeState extends State<PostRecipe> {
   @override
   void initState() {
     _recipeName = TextEditingController();
+    _recipeType = TextEditingController();
     _ingredients = TextEditingController();
     _description = TextEditingController();
     _preparationTime = TextEditingController();
     _instructions = TextEditingController();
-    _ingredientsQuantity = TextEditingController();
+    _ingredientsList.add(Ingredient(quantity: '', name: ''));
+    //_instructionList.add(String(instruction: ''));
     super.initState();
   }
 
   @override
   void dispose() {
     _recipeName.dispose();
+    _recipeType.dispose();
     _ingredients.dispose();
     _description.dispose();
     _preparationTime.dispose();
@@ -122,6 +130,14 @@ class _PostRecipeState extends State<PostRecipe> {
                           ),
                         ),
                       ),
+                      // Container(
+                      //   child: TextFormField(
+                      //     controller: _recipeType,
+                      //     decoration: const InputDecoration(
+                      //       labelText: "Recipe Type",
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         child: TextFormField(
                             controller: _description,
@@ -129,34 +145,33 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const InputDecoration(labelText: "Description"),
                             maxLength: 300),
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            child: TextFormField(
-                              controller: _ingredientsQuantity,
-                              decoration: const InputDecoration(
-                                labelText: "Quantity",
-                              ),
-                              maxLength: 80,
-                            ),
+                      Expanded(
+                        child: SizedBox(
+                          child: ListView.builder(
+                            // shrinkWrap: true,
+                            //  physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _ingredientsList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return IngredientRow(
+                                quantityController: TextEditingController(
+                                    text: _ingredientsList[index].quantity),
+                                nameController: TextEditingController(
+                                    text: _ingredientsList[index].name),
+                                onAddPressed: () {
+                                  setState(() {
+                                    _ingredientsList.add(
+                                        Ingredient(quantity: '', name: ''));
+                                  });
+                                },
+                                onRemovePressed: () {
+                                  setState(() {
+                                    _ingredientsList.removeAt(index);
+                                  });
+                                },
+                              );
+                            },
                           ),
-                          Container(
-                            width: 120,
-                            child: TextFormField(
-                              controller: _ingredients,
-                              decoration: const InputDecoration(
-                                labelText: "Ingredients",
-                              ),
-                              maxLength: 80,
-                            ),
-                          ),
-                          GestureDetector(
-                              child: IconButton(
-                            icon: const Icon(CupertinoIcons.add),
-                            onPressed: () {},
-                          )),
-                        ],
+                        ),
                       ),
                       Container(
                         child: TextFormField(
@@ -173,6 +188,28 @@ class _PostRecipeState extends State<PostRecipe> {
                                 labelText: "Instructions"),
                             maxLength: 300),
                       ),
+                      // Expanded(
+                      //     child: SizedBox(
+                      //   child: ListView.builder(
+                      //     itemCount: _instructionList.length,
+                      //     itemBuilder: (BuildContext context, int index) {
+                            // return AddInstructions(
+                            //     ingredientController: TextEditingController(
+                            //         text: _instructionList[index]),
+                            //     onAddPressed: () {
+                            //       setState(() {
+                            //         _instructionList
+                            //             .add(String(instruction: ''));
+                            //       });
+                            //     },
+                            //     onRemovePressed: () {
+                            //       setState(() {
+                            //         _ingredientsList.removeAt(index);
+                            //       });
+                            //     });
+                          //},
+                      //   ),
+                      // )),
                       Container(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(

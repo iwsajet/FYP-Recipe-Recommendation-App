@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
@@ -11,7 +9,6 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
- 
 
   UserModel user = UserModel(email: '', password: '');
   void validate() {
@@ -149,9 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                                 fixedSize: const Size(300, 50)),
                             child: const Text("Login"),
                             onPressed: () async {
-                               Provider.of<LoginProvider>(context,
-                                      listen: false)
-                                  .logIn(context);
+                              context.read<LoginProvider>().login(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
                             },
                           ),
                         ),
