@@ -7,6 +7,7 @@ import 'package:fyp_recipe_app/screens/first_screen.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/login_page.dart';
 import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
+import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:fyp_recipe_app/services/auth_service.dart';
 import 'package:provider/provider.dart';
 

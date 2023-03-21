@@ -9,6 +9,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
+import '../network/api_response.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   var _isObscured;
+  late final LoginProvider loginProvider;
 
   @override
   void initState() {
@@ -28,6 +30,19 @@ class _LoginPageState extends State<LoginPage> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _isObscured = true;
+    loginProvider = context.read<LoginProvider>();
+    loginProvider.addListener(loginListener);
+  }
+
+  void loginListener() {
+    if (loginProvider.loginResponse.status == Status.error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(loginProvider.loginResponse.error.toString())));
+    } else if (loginProvider.loginResponse.status == Status.success) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: ((context) => const HomePage())),
+          (route) => false);
+    }
   }
 
   @override
@@ -39,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  UserModel user = UserModel(email: '', password: '');
+
   void validate() {
     if (formkey.currentState!.validate()) {
       // ignore: avoid_print
@@ -145,10 +160,10 @@ class _LoginPageState extends State<LoginPage> {
                                 fixedSize: const Size(300, 50)),
                             child: const Text("Login"),
                             onPressed: () async {
-                              context.read<LoginProvider>().login(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  );
+                              Provider.of<LoginProvider>(context, listen: false)
+                                  .login(
+                                      email: _emailController.text,
+                                      password: _passwordController.text);
                             },
                           ),
                         ),

@@ -212,9 +212,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: const Text("Register"),
                             onPressed: () async {
                               context.read<SignUpProvider>().signUp(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  );
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                  fullname: _fullnameController.text);
                             },
                             //onTap:(){register_user()}
                           ),

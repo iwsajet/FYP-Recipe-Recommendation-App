@@ -3,7 +3,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/add_instructions.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
+import 'package:fyp_recipe_app/models/post_model.dart';
+import 'package:fyp_recipe_app/provider/post_recipe_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_input_chips/flutter_input_chips.dart';
 
 import '../custom_widget/add_ingredient.dart';
 import '../models/ingredient_model.dart';
@@ -16,15 +20,16 @@ class PostRecipe extends StatefulWidget {
 }
 
 class _PostRecipeState extends State<PostRecipe> {
-  late final TextEditingController _recipeName;
-  late final TextEditingController _recipeType;
-  late final TextEditingController _ingredients;
-  late final TextEditingController _description;
-  late final TextEditingController _preparationTime;
-  late final TextEditingController _instructions;
+  late final TextEditingController recipeNameController;
+  late final TextEditingController recipeTypeController;
+  late final TextEditingController ingredientsController;
+  late final TextEditingController descriptionController;
+  late final TextEditingController preparationTimeController;
+  late final TextEditingController instructionsController;
+  late final PostRecipeProvider postRecipeProvider;
 
   final List<Ingredient> _ingredientsList = [];
-  final List<String> _instructionList = [];
+ 
   File? pickedImage;
   Future pickImage(ImageSource imageType) async {
     try {
@@ -43,25 +48,28 @@ class _PostRecipeState extends State<PostRecipe> {
 
   @override
   void initState() {
-    _recipeName = TextEditingController();
-    _recipeType = TextEditingController();
-    _ingredients = TextEditingController();
-    _description = TextEditingController();
-    _preparationTime = TextEditingController();
-    _instructions = TextEditingController();
+    recipeNameController = TextEditingController();
+    recipeTypeController = TextEditingController();
+    ingredientsController = TextEditingController();
+    descriptionController = TextEditingController();
+    preparationTimeController = TextEditingController();
+    instructionsController = TextEditingController();
     _ingredientsList.add(Ingredient(quantity: '', name: ''));
     //_instructionList.add(String(instruction: ''));
+    postRecipeProvider = context.read<PostRecipeProvider>();
+    postRecipeProvider.addListener(postRecipeListener);
     super.initState();
   }
 
+  void postRecipeListener() {}
   @override
   void dispose() {
-    _recipeName.dispose();
-    _recipeType.dispose();
-    _ingredients.dispose();
-    _description.dispose();
-    _preparationTime.dispose();
-    _instructions.dispose();
+    recipeNameController.dispose();
+    recipeTypeController.dispose();
+    ingredientsController.dispose();
+    descriptionController.dispose();
+    preparationTimeController.dispose();
+    instructionsController.dispose();
     super.dispose();
   }
 
@@ -124,23 +132,23 @@ class _PostRecipeState extends State<PostRecipe> {
                           )),
                       Container(
                         child: TextFormField(
-                          controller: _recipeName,
+                          controller: recipeNameController,
                           decoration: const InputDecoration(
                             labelText: "Name",
                           ),
                         ),
                       ),
-                      // Container(
-                      //   child: TextFormField(
-                      //     controller: _recipeType,
-                      //     decoration: const InputDecoration(
-                      //       labelText: "Recipe Type",
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
                         child: TextFormField(
-                            controller: _description,
+                          controller: recipeTypeController,
+                          decoration: const InputDecoration(
+                            labelText: "Recipe Type",
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: TextFormField(
+                            controller: descriptionController,
                             decoration:
                                 const InputDecoration(labelText: "Description"),
                             maxLength: 300),
@@ -175,41 +183,21 @@ class _PostRecipeState extends State<PostRecipe> {
                       ),
                       Container(
                         child: TextFormField(
-                          controller: _preparationTime,
+                          controller: preparationTimeController,
                           decoration: const InputDecoration(
                               labelText: "Preparation time",
                               hintText: "Rough estimate on preparation time"),
                         ),
                       ),
                       Container(
-                        child: TextFormField(
-                            controller: _instructions,
-                            decoration: const InputDecoration(
-                                labelText: "Instructions"),
-                            maxLength: 300),
+                        // child: TextFormField(
+                        //     controller: instructionsController,
+                        //     decoration: const InputDecoration(
+                        //         labelText: "Instructions"),
+                        //     maxLength: 300),
+                        FlutterInputChips()
                       ),
-                      // Expanded(
-                      //     child: SizedBox(
-                      //   child: ListView.builder(
-                      //     itemCount: _instructionList.length,
-                      //     itemBuilder: (BuildContext context, int index) {
-                            // return AddInstructions(
-                            //     ingredientController: TextEditingController(
-                            //         text: _instructionList[index]),
-                            //     onAddPressed: () {
-                            //       setState(() {
-                            //         _instructionList
-                            //             .add(String(instruction: ''));
-                            //       });
-                            //     },
-                            //     onRemovePressed: () {
-                            //       setState(() {
-                            //         _ingredientsList.removeAt(index);
-                            //       });
-                            //     });
-                          //},
-                      //   ),
-                      // )),
+                      
                       Container(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -227,5 +215,31 @@ class _PostRecipeState extends State<PostRecipe> {
         ]),
       ),
     );
+  }
+}
+
+class Buttonwidget extends StatelessWidget {
+  const Buttonwidget({
+    super.key,
+    required this.recipeNameController,
+    required this.descriptionController,
+    required this.ingredientsController,
+    required this.instructionController,
+    required this.preparationTimeController,
+  });
+  final TextEditingController recipeNameController;
+  final TextEditingController descriptionController;
+  final TextEditingController ingredientsController;
+  final TextEditingController instructionController;
+  final TextEditingController preparationTimeController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        // child: ElevatedButton(
+        //   onPressed: () {RecipeModel recipe = RecipeModel(name: recipeNameController.text, ingredients: ingredientsController.text, instruction: instructionController.text, preptime: preparationTimeController.text,);},
+        //   child: const Text("Post"),
+        // )
+        );
   }
 }

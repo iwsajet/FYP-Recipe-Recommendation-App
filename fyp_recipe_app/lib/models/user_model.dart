@@ -10,6 +10,7 @@ class UserModel {
       this.username});
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
+    print(map);
     return UserModel(email: map['email'], password: map['password']);
   }
 }

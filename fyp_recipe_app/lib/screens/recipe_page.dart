@@ -17,14 +17,33 @@ class _RecipePageState extends State<RecipePage> {
       child: Column(
         children: [
           //dish image
-          Container(),
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Image.network("")),
           //recipe name, posted by, description
-          Container(),
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Text("")),
           //ingredients
-          Container(),
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Text("")),
           // rating
           Container(
             // implement the rating bar
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
             child: RatingBar(
                 initialRating: 0,
                 direction: Axis.horizontal,
@@ -46,10 +65,20 @@ class _RecipePageState extends State<RecipePage> {
                   });
                 }),
           ),
-          //prepatation time serving size ingredients
-          Container(),
+          //prepatation time
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Text("")),
           //instruction
-          Container(),
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Text("")),
           //comments
           Container(
               child: Column(children: [
