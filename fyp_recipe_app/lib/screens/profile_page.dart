@@ -24,7 +24,7 @@ class _UserProfileState extends State<UserProfile>
     return Scaffold(
       bottomNavigationBar: const BottomNavBar(),
       body: Container(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [

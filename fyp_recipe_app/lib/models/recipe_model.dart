@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 
 import 'ingredient_model.dart';
@@ -10,18 +13,18 @@ class RecipeModel {
     required this.recipeType,
     required this.ingredients,
     required this.instruction,
-    required this.preptime,
+    required this.preptime, required imageUrl,
     // required this.imageUrl,
     // this.originalUrl,
   });
-  Image? recipePic;
+  File? recipePic;
   int? id;
   String name;
   String recipeType;
   List<Ingredient> ingredients;
   List<String> instruction;
   String preptime;
-  // String? imageUrl;
+   String? imageUrl;
   // String? originalUrl;
 
   factory RecipeModel.fromJson(Map<String, dynamic> map) {
@@ -32,7 +35,7 @@ class RecipeModel {
       ingredients: map['ingredients'],
       instruction: map['instructions'],
     preptime: map['preptime'],
-    // imageUrl: map['imageUrl'] 
+    imageUrl: map['imageUrl'] 
      );
   }
 }

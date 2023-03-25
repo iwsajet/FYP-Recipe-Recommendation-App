@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/bottom_nav_bar.dart';
+import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
+import 'package:fyp_recipe_app/screens/search_result_page.dart';
+import 'package:provider/provider.dart';
 
+import '../custom_widget/search_bar.dart';
 import '../custom_widget/top_bar.dart';
+import '../network/api_response.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,49 +18,81 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final TextEditingController searchController;
+  late final GetSearchProvider searchProvider;
+  @override
+  void initState() {
+    searchController = TextEditingController();
+    searchProvider = context.read<GetSearchProvider>();
+    searchProvider.addListener(searchListner);
+    super.initState();
+  }
+void searchListner(){
+   if (searchProvider.getSearchResponse.status == Status.error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(searchProvider.getSearchResponse.error.toString())));
+    } else if (searchProvider.getSearchResponse.status == Status.success) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: ((context) => const SearchResult())),
+         );
+    }
+}
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: const BottomNavBar(),
-      body: SingleChildScrollView(
+      body: CustomScrollView(
         // padding: const EdgeInsets.all(20),
-        child: Stack(children: [
-          Column(children: [
-            const TopBar(
+        slivers: [
+          const SliverToBoxAdapter(
+            child: TopBar(
               title: 'Browse for some recipes',
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
-              child: Column(children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Search',
-                    suffixIcon: Icon(Icons.search),
-                  ),
-                ),
-                SizedBox(
-                  height: 100,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: const [
-                      HomePageCards(
-                        image: 'assets/icons/ratings.png',
-                        title: 'Recommended',
-                      ),
-                      HomePageCards(
-                        image: 'assets/icons/quality.png',
-                        title: 'Top Rated',
-                      )
-                    ],
-                  ),
-                )
-              ]),
+          ),
+          SliverToBoxAdapter(
+            child: SearchBarWidget(
+              searchController: searchController,
             ),
-          ]),
-        ]),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  HomePageCards(
+                    image: 'assets/icons/ratings.png',
+                    title: 'Recommended',
+                  ),
+                  HomePageCards(
+                    image: 'assets/icons/quality.png',
+                    title: 'Top Rated',
+                  )
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+              child: SizedBox(
+            child: StaggeredGrid.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              children: const [
+                RecipeTypeCard(
+                    image: 'assets/icons/breakfast.png', title: "Breakfast"),
+                RecipeTypeCard(image: 'assets/icons/meal.png', title: "Lunch"),
+                RecipeTypeCard(
+                    image: 'assets/icons/dinner.png', title: "Dinner"),
+                RecipeTypeCard(image: 'assets/icons/bake.png', title: "Baking"),
+                RecipeTypeCard(
+                    image: 'assets/icons/hot-soup.png', title: "Soup"),
+                RecipeTypeCard(image: 'assets/icons/diet.png', title: "Diet")
+              ],
+            ),
+          ))
+        ],
       ),
     );
   }
@@ -103,14 +141,43 @@ class HomePageCards extends StatelessWidget {
 }
 
 class RecipeTypeCard extends StatelessWidget {
-  const RecipeTypeCard({super.key});
+  const RecipeTypeCard({
+    super.key,
+    required this.image,
+    required this.title,
+  });
+  final String image;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
-      child: Card(),
-
+      padding: const EdgeInsets.all(10),
+      child: GestureDetector(
+        onTap: () {},
+        child: Container(
+          // padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 100),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              color: AppColor.secondary),
+          child: Column(
+            children: [
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Image.asset(
+                image,
+                height: 100,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/screens/recipe_page.dart';
 
-import '../models/post_model.dart';
+import '../models/recipe_model.dart';
 
 class PostTab extends StatefulWidget {
   const PostTab({super.key});
@@ -37,13 +37,13 @@ class RecipeCard extends StatelessWidget {
             fit: BoxFit.contain,
             width: MediaQuery.of(context).size.width / 3,
             height: 100,
-            errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
           ),
           // : const SizedBox(),
           //name or title of recipe
           Flexible(
               child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

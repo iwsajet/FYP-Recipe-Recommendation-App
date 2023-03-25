@@ -18,7 +18,7 @@ class IngredientRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: 100,
           child: TextFormField(
             controller: quantityController,
@@ -28,7 +28,7 @@ class IngredientRow extends StatelessWidget {
             maxLength: 80,
           ),
         ),
-        Container(
+        SizedBox(
           width: 120,
           child: TextFormField(
             controller: nameController,

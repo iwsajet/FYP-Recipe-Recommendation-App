@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/network/http_client.dart';
+import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
+import 'package:fyp_recipe_app/provider/get_recipe_provider.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
+import 'package:fyp_recipe_app/provider/post_recipe_provider.dart';
 import 'package:fyp_recipe_app/provider/signup_provider.dart';
 import 'package:fyp_recipe_app/screens/first_screen.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
@@ -31,10 +34,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoginProvider>(
           create: (context) => LoginProvider(authService: authService),
         ),
-        // Provider<LoginProvider>(create: (context) => LoginProvider()),
+        ChangeNotifierProvider<PostRecipeProvider>(
+            create: (context) =>
+                PostRecipeProvider(authService: authService)),
+        // ChangeNotifierProvider<GetRecipeProvider>(
+        //     create: (context) => GetRecipeProvider(authService: authService)),
+        // ChangeNotifierProvider<GetSearchProvider>(
+        //     create: (context) => GetSearchProvider(authService: authService))
       ],
       child: MaterialApp(
-        home: const FirstScreen(),
+        home: const HomePage(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: AppColor.primary,
