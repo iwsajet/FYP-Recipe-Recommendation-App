@@ -31,7 +31,7 @@ class _SearchResultState extends State<SearchResult> {
             searchController: searchController,
           ),
           const SortByDropdown(),
-          ListView(),
+          SizedBox(child: ListView()),
         ],
       )),
     );
@@ -58,7 +58,8 @@ class RecipeCard extends StatelessWidget {
             fit: BoxFit.contain,
             width: MediaQuery.of(context).size.width / 3,
             height: 100,
-            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Icons.error),
           ),
           // : const SizedBox(),
           //name or title of recipe

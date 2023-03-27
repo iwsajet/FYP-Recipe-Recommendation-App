@@ -10,6 +10,7 @@ import 'package:fyp_recipe_app/screens/first_screen.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/login_page.dart';
 import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
+import 'package:fyp_recipe_app/screens/profile_page.dart';
 import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:fyp_recipe_app/services/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -35,12 +36,11 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginProvider(authService: authService),
         ),
         ChangeNotifierProvider<PostRecipeProvider>(
-            create: (context) =>
-                PostRecipeProvider(authService: authService)),
-        // ChangeNotifierProvider<GetRecipeProvider>(
-        //     create: (context) => GetRecipeProvider(authService: authService)),
-        // ChangeNotifierProvider<GetSearchProvider>(
-        //     create: (context) => GetSearchProvider(authService: authService))
+            create: (context) => PostRecipeProvider(authService: authService)),
+        ChangeNotifierProvider<GetRecipeProvider>(
+            create: (context) => GetRecipeProvider(authService: authService)),
+        ChangeNotifierProvider<GetSearchProvider>(
+            create: (context) => GetSearchProvider(authService: authService))
       ],
       child: MaterialApp(
         home: const HomePage(),

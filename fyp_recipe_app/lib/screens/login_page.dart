@@ -50,6 +50,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    loginProvider.dispose();
+    
+    // loginListener().dispose();
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();

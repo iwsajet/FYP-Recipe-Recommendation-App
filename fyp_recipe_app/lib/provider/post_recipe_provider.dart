@@ -16,19 +16,22 @@ class PostRecipeProvider with ChangeNotifier {
       required String name,
       required String type,
       required String description,
-      required List<String> ingredients,
+      required List<Map<String, dynamic>> ingredients,
       required String preptime,
       required List<String> instruction}) async {
     try {
       await _authService.postRecipe(
-         recipePic: '',
-          name: name,
-          type: type,
-          description: description,
-          ingredients: ingredients,
-          instruction: instruction,
-          preptime: preptime, );
-    } catch (e) {postResponse = ApiResponse.error(e.toString());
-    notifyListeners();}
+        // recipePic: recipePic,
+        name: name,
+        type: type,
+        description: description,
+        ingredients: ingredients,
+        instruction: instruction,
+        preptime: preptime,
+      );
+    } catch (e) {
+      postResponse = ApiResponse.error(e.toString());
+      notifyListeners();
+    }
   }
 }

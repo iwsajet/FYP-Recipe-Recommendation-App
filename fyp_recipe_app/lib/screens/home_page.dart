@@ -27,16 +27,22 @@ class _HomePageState extends State<HomePage> {
     searchProvider.addListener(searchListner);
     super.initState();
   }
-void searchListner(){
-   if (searchProvider.getSearchResponse.status == Status.error) {
+@override
+  void dispose() {
+   searchController.dispose();
+    super.dispose();
+  }
+  void searchListner() {
+    if (searchProvider.getSearchResponse.status == Status.error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(searchProvider.getSearchResponse.error.toString())));
     } else if (searchProvider.getSearchResponse.status == Status.success) {
       Navigator.of(context).push(
-          MaterialPageRoute(builder: ((context) => const SearchResult())),
-         );
+        MaterialPageRoute(builder: ((context) => const SearchResult())),
+      );
     }
-}
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -162,13 +168,16 @@ class RecipeTypeCard extends StatelessWidget {
               color: AppColor.secondary),
           child: Column(
             children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(
-                width: 15,
+                height: 15,
               ),
               Image.asset(
                 image,

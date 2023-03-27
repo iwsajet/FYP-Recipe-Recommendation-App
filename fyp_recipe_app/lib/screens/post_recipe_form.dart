@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 
 import '../custom_widget/add_ingredient.dart';
+import '../custom_widget/ingredient_row.dart';
 import '../models/ingredient_model.dart';
 import '../network/api_response.dart';
 
@@ -19,6 +20,7 @@ class PostRecipe extends StatefulWidget {
 }
 
 class _PostRecipeState extends State<PostRecipe> {
+  final _formKey = GlobalKey<FormState>();
   late final TextEditingController recipeNameController;
   late final TextEditingController recipeTypeController;
   late final TextEditingController quantityController;
@@ -27,9 +29,9 @@ class _PostRecipeState extends State<PostRecipe> {
   late final TextEditingController preparationTimeController;
   late final TextEditingController instructionsController;
   late final PostRecipeProvider postRecipeProvider;
-
-  final List<Ingredient> _ingredientsList = [];
-
+  int index = 0;
+  List<String> _instructions = [];
+  List<IngredientFormItemWidget> ingredientForms = List.empty(growable: true);
   File? pickedImage;
   Future pickImage(ImageSource imageType) async {
     try {
@@ -46,15 +48,24 @@ class _PostRecipeState extends State<PostRecipe> {
     }
   }
 
-  void _addIngredient() {
+  onRemove(Ingredient ingredient) {
     setState(() {
-      _ingredientsList.add(Ingredient(quantity: '', name: ''));
+      int index = ingredientForms
+          .indexWhere((element) => element.ingredientModel.id == ingredient.id);
+
+      ingredientForms.removeAt(index);
     });
   }
 
-  void _removeIngredient(int index) {
+  onAdd() {
     setState(() {
-      _ingredientsList.removeAt(index);
+      Ingredient _ingredientModel =
+          Ingredient(id: ingredientForms.length, name: '', quantity: '');
+      ingredientForms.add(IngredientFormItemWidget(
+        index: ingredientForms.length,
+        ingredientModel: _ingredientModel,
+        onRemove: () => onRemove(_ingredientModel),
+      ));
     });
   }
 
@@ -68,10 +79,8 @@ class _PostRecipeState extends State<PostRecipe> {
     descriptionController = TextEditingController();
     preparationTimeController = TextEditingController();
     instructionsController = TextEditingController();
-    _ingredientsList.add(Ingredient(quantity: '', name: ''));
     postRecipeProvider = context.read<PostRecipeProvider>();
     postRecipeProvider.addListener(postRecipeListener);
-
     super.initState();
   }
 
@@ -116,6 +125,7 @@ class _PostRecipeState extends State<PostRecipe> {
               borderRadius: BorderRadius.circular(30),
             ),
             child: Form(
+              key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -168,19 +178,37 @@ class _PostRecipeState extends State<PostRecipe> {
                         decoration:
                             const InputDecoration(labelText: "Description"),
                         maxLength: 300),
-                   
+                    //Ingredient row here
+                    // IngredientRow(quantityController: quantityController, nameController: nameController, onAddPressed: _addIngredient, onRemovePressed: _removeIngredient(index)),
+
+                    IconButton(
+                        onPressed: () {
+                          onAdd();
+                        },
+                        icon: Icon(Icons.add)),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ingredientForms.length,
+                        itemBuilder: (_, index) {
+                          return ingredientForms[index];
+                        }),
                     TextFormField(
                       controller: preparationTimeController,
                       decoration: const InputDecoration(
                           labelText: "Preparation time",
-                          hintText: "Rough estimate on preparation time"),
+                          hintText:
+                              "Preparation time will be counted in minutes. eg 40"),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     FlutterInputChips(
                       initialValue: const [],
                       maxChips: 20,
                       onChanged: (v) {
                         setState(() {
-                          v;
+                          _instructions = v;
                         });
                       },
                       padding: const EdgeInsets.all(10),
@@ -200,15 +228,49 @@ class _PostRecipeState extends State<PostRecipe> {
                       chipDeleteIconColor: Colors.grey,
                       chipBackgroundColor: Colors.white,
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(300, 50)),
+                        fixedSize: const Size(300, 50),
+                      ),
                       child: const Text("Post"),
                       onPressed: () {
-                        for (int i = 0; i < _ingredientsList.length; i++) {
-                          print(_ingredientsList[i].name);
+                        bool allValid = true;
+                        for (var element in ingredientForms) {
+                          allValid = (allValid && element.isValidated());
                         }
-                        //context.read<PostRecipeProvider>().postRecipe(recipePic: pickedImage, name: recipeNameController.text, type: recipeTypeController.text, description: descriptionController.text, ingredients: ingredientsController.text, preptime: preparationTimeController.text, instruction: instructionsController.text,),
+
+                        if (allValid &&
+                            _instructions.isNotEmpty &&
+                            _formKey.currentState!.validate()) {
+                          List<Ingredient> ingredients = ingredientForms
+                              .map((e) => e.ingredientModel)
+                              .toList();
+
+                          print("ingredients $ingredients");
+
+                          context.read<PostRecipeProvider>().postRecipe(
+                                recipePic: pickedImage,
+                                name: recipeNameController.text,
+                                type: recipeTypeController.text,
+                                description: descriptionController.text,
+                                ingredients: ingredients
+                                    .map((e) => {
+                                          'name': e.name,
+                                          'quantity': e.quantity
+                                        })
+                                    .toList(),
+                                preptime: preparationTimeController.text,
+                                instruction: _instructions,
+                              );
+                        } else {
+                          ScaffoldMessenger.of(context)
+                            ..clearSnackBars()
+                            ..showSnackBar(const SnackBar(
+                                content: Text('Some values are not filled')));
+                        }
                       },
                     )
                   ],

@@ -1,10 +1,8 @@
+import 'dart:io';
+
 import 'package:fyp_recipe_app/models/recipe_model.dart';
 import 'package:fyp_recipe_app/network/http_client.dart';
-import 'package:fyp_recipe_app/screens/post_recipe_form.dart';
-import 'package:http/http.dart';
-
 import '../models/user_model.dart';
-import '../models/recipe_model.dart';
 import '../network/api_const.dart';
 
 class AuthService {
@@ -37,18 +35,18 @@ class AuthService {
   }
 
   Future<RecipeModel> postRecipe({
-    required String recipePic,
+    //required File? recipePic,
     required String name,
-    required List<String> ingredients,
+    required List<Map<String, dynamic>> ingredients,
     required List<String> instruction,
     required String description,
     required String preptime,
     required String type,
   }) async {
     final response = await _client.post(
-      url: "${ApiConst.baseURL}postRecipe",
+      url: "${ApiConst.baseURL}recipes/postRecipe",
       body: {
-        'recipePic': recipePic,
+        //'recipePic': recipePic,
         'name': name,
         'type': type,
         'ingredients': ingredients,
@@ -59,32 +57,34 @@ class AuthService {
     );
     return RecipeModel.fromJson(response);
   }
-  Future<RecipeModel> getRecipe({
-   required String recipePic,
-    required String name,
-    required List<String> ingredients,
-    required List<String> instruction,
-    required String description,
-    required String preptime,
-    required String type, required String imageURL,
-}) async{
-   final response = await _client.get(
-      url: "${ApiConst.baseURL}getRecipe",
-     
-    );
-    return RecipeModel.fromJson(response);
-}
 
-Future<void> searchRecipe({
-   required String recipePic,
+  Future<RecipeModel> getRecipe({
+    required String recipePic,
     required String name,
     required List<String> ingredients,
     required List<String> instruction,
     required String description,
     required String preptime,
     required String type,
-})async{
-  final response = await _client.get(url: "${ApiConst.baseURL}searchRecipe?keyword=keyword");
-}
-}
+    required String imageURL,
+  }) async {
+    final response = await _client.get(
+      url: "${ApiConst.baseURL}getRecipe",
+    );
+    return RecipeModel.fromJson(response);
+  }
 
+  Future<void> searchRecipe(
+      {
+      //  required String recipePic,
+      //   required String name,
+      //   required List<String> ingredients,
+      //   required List<String> instruction,
+      //   required String description,
+      //   required String preptime,
+      //   required String type,
+      required String keyword}) async {
+    final response = await _client.get(
+        url: "${ApiConst.baseURL}searchRecipe?keyword=$keyword");
+  }
+}

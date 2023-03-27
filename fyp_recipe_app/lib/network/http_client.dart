@@ -26,6 +26,7 @@ class RecipeSearchHttpClient {
         body: jsonEncode(body),
         headers: header(),
       );
+      log("Request Url is ${response.request!.url.toString()}");
       log("Status code${response.statusCode}");
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

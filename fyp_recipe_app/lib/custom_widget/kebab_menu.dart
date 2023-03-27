@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class KebabMenuWidget extends StatelessWidget {
-  final VoidCallback onReportClicked;
+  final Future<void> Function(String) onReportSubmitted;
 
-  const KebabMenuWidget({super.key, required this.onReportClicked});
+  KebabMenuWidget({required this.onReportSubmitted});
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +12,44 @@ class KebabMenuWidget extends StatelessWidget {
         return <PopupMenuEntry>[
           PopupMenuItem(
             child: ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('Report'),
-              onTap: onReportClicked,
+              leading: Icon(Icons.report),
+              title: Text('Report'),
+              onTap: () async {
+                final result = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    String reportMessage = '';
+
+                    return AlertDialog(
+                      title: Text('Report'),
+                      content: TextField(
+                        decoration: InputDecoration(hintText: 'Enter your report'),
+                        onChanged: (value) => reportMessage = value,
+                      ),
+                    
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('Submit'),
+                          onPressed: () => Navigator.of(context).pop(reportMessage),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (result != null) {
+                  onReportSubmitted(result);
+                }
+              },
             ),
           ),
         ];
       },
-      icon: const Icon(Icons.more_vert),
+      icon: Icon(Icons.more_vert),
     );
   }
 }
-//to use KebadMenuWidget(onReportClicked: (){handelReport})
