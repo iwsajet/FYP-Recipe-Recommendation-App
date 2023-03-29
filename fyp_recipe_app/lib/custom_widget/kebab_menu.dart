@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class KebabMenuWidget extends StatelessWidget {
-  final Future<void> Function(String) onReportSubmitted;
+  final Future<void> Function(String,String) onReportSubmitted;
+  final fullnameController = TextEditingController();
+  final reportController = TextEditingController();
 
   KebabMenuWidget({required this.onReportSubmitted});
 
@@ -12,8 +14,8 @@ class KebabMenuWidget extends StatelessWidget {
         return <PopupMenuEntry>[
           PopupMenuItem(
             child: ListTile(
-              leading: Icon(Icons.report),
-              title: Text('Report'),
+              leading: const Icon(Icons.report),
+              title: const Text('Report'),
               onTap: () async {
                 final result = await showDialog(
                   context: context,
@@ -21,35 +23,52 @@ class KebabMenuWidget extends StatelessWidget {
                     String reportMessage = '';
 
                     return AlertDialog(
-                      title: Text('Report'),
-                      content: TextField(
-                        decoration: InputDecoration(hintText: 'Enter your report'),
-                        onChanged: (value) => reportMessage = value,
+                      title: const Text('Report'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: fullnameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Full name',
+                              hintText: 'Enter your name',
+                            ),
+                          ),
+                          TextField(
+                            controller: reportController,
+                            decoration: const InputDecoration(
+                              labelText: 'Report details',
+                              hintText: 'Enter report details',
+                            ),
+                          ),
+                        ],
                       ),
-                    
                       actions: <Widget>[
-                        TextButton(
+                       TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                           child: Text('Cancel'),
-                          onPressed: () => Navigator.of(context).pop(),
                         ),
                         TextButton(
+                          onPressed: () async {
+                            final fullname = fullnameController.text;
+                            final report = reportController.text;
+                            await onReportSubmitted(fullname, report)
+                                .then((_) => Navigator.pop(context));
+                          },
                           child: Text('Submit'),
-                          onPressed: () => Navigator.of(context).pop(reportMessage),
                         ),
                       ],
                     );
                   },
                 );
-
-                if (result != null) {
-                  onReportSubmitted(result);
-                }
               },
             ),
           ),
         ];
       },
-      icon: Icon(Icons.more_vert),
+      icon: const Icon(Icons.more_vert),
     );
   }
 }

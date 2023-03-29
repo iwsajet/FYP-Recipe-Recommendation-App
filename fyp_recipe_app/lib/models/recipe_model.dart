@@ -11,6 +11,7 @@ class RecipeModel {
     required this.name,
     required this.recipeType,
     required this.ingredients,
+    required this.description,
     required this.instruction,
     required this.preptime,
     required imageUrl,
@@ -20,6 +21,7 @@ class RecipeModel {
   int? id;
   String name;
   String recipeType;
+  String description;
   List<RecipeIngredientModel> ingredients;
   List<String> instruction;
   int preptime;
@@ -30,6 +32,7 @@ class RecipeModel {
         recipePic: map['recipePic'],
         name: map['name'],
         recipeType: map['type'],
+        description: map['description'],
         ingredients: (map['ingredients'] as List<dynamic>)
             .map((e) => RecipeIngredientModel.fromMap(e))
             .toList(),

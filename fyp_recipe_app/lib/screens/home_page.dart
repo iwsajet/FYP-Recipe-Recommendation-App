@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/bottom_nav_bar.dart';
 import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
+import 'package:fyp_recipe_app/screens/recipetype_screen.dart';
 import 'package:fyp_recipe_app/screens/search_result_page.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +28,13 @@ class _HomePageState extends State<HomePage> {
     searchProvider.addListener(searchListner);
     super.initState();
   }
-@override
+
+  @override
   void dispose() {
-   searchController.dispose();
+    searchController.dispose();
     super.dispose();
   }
+
   void searchListner() {
     if (searchProvider.getSearchResponse.status == Status.error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -47,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(),
       body: CustomScrollView(
         // padding: const EdgeInsets.all(20),
         slivers: [
@@ -57,10 +60,36 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: SearchBarWidget(
-              searchController: searchController,
-            ),
-          ),
+              child: GestureDetector(
+            child: Container(
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColor.secondary),
+                    color: Colors.white),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.search,
+                      color: AppColor.secondary,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Search",
+                      style: TextStyle(
+                          color: AppColor.secondary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  ],
+                )),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SearchResult()));
+            },
+          )),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 100,
@@ -85,16 +114,48 @@ class _HomePageState extends State<HomePage> {
               crossAxisCount: 2,
               mainAxisSpacing: 4,
               crossAxisSpacing: 4,
-              children: const [
-                RecipeTypeCard(
-                    image: 'assets/icons/breakfast.png', title: "Breakfast"),
-                RecipeTypeCard(image: 'assets/icons/meal.png', title: "Lunch"),
-                RecipeTypeCard(
-                    image: 'assets/icons/dinner.png', title: "Dinner"),
-                RecipeTypeCard(image: 'assets/icons/bake.png', title: "Baking"),
-                RecipeTypeCard(
-                    image: 'assets/icons/hot-soup.png', title: "Soup"),
-                RecipeTypeCard(image: 'assets/icons/diet.png', title: "Diet")
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecipeListView()));
+                  },
+                  child: const RecipeTypeCard(
+                      image: 'assets/icons/breakfast.png', title: "Breakfast"),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RecipeListView()));
+                    },
+                    child: const RecipeTypeCard(
+                        image: 'assets/icons/meal.png', title: "Lunch")),
+                GestureDetector(
+                  child: const RecipeTypeCard(
+                      image: 'assets/icons/dinner.png', title: "Dinner"),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RecipeListView()));
+                    },
+                    child: const RecipeTypeCard(
+                        image: 'assets/icons/bake.png', title: "Baking")),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecipeListView()));
+                  },
+                  child: const RecipeTypeCard(
+                      image: 'assets/icons/hot-soup.png', title: "Soup"),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RecipeListView()));
+                    },
+                    child: const RecipeTypeCard(
+                        image: 'assets/icons/diet.png', title: "Diet"))
               ],
             ),
           ))

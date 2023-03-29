@@ -10,11 +10,10 @@ class SearchBarWidget extends StatelessWidget {
       controller: searchController,
       decoration: const InputDecoration(
         labelText: 'Search',
-        suffixIcon: Icon(Icons.search),
+        
       ),
       onSubmitted: (String keyword) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SearchResult()));
+        //searchRecipe(keyword);
       },
     );
   }

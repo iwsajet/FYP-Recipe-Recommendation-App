@@ -14,7 +14,7 @@ class GetRecipeProvider with ChangeNotifier {
   ApiResponse<RecipeModel> getRecipeResponse = ApiResponse.loading();
   Future<void> getRecipe(
       {
-        required File? recipePic,
+        //required File? recipePic,
         required String imageURL, 
       required String name,
       required String type,
@@ -30,7 +30,7 @@ class GetRecipeProvider with ChangeNotifier {
           instruction: [],
           name: '',
           preptime: '',
-          recipePic: '',
+          //recipePic: '',
           type: '');
     } catch (e) {getRecipeResponse = ApiResponse.error(e.toString());
     notifyListeners();}
