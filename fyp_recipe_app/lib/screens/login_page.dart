@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
-import 'package:fyp_recipe_app/screens/forgot_pw_page.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/register_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -50,9 +49,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    loginProvider.dispose();
+    //loginProvider.dispose();
     
-    // loginListener().dispose();
+
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          // alignment: Alignment.center,
+                
                           child: const Text(
                             "Login",
                             style: TextStyle(
@@ -157,29 +156,16 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(300, 50)),
-                            child: const Text("Login"),
-                            onPressed: () async {
-                              Provider.of<LoginProvider>(context, listen: false)
-                                  .login(
-                                      email: _emailController.text,
-                                      password: _passwordController.text);
-                            },
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ForgotPassword(),
-                              ),
-                            );
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(300, 50)),
+                          child: const Text("Login"),
+                          onPressed: () async {
+                            Provider.of<LoginProvider>(context, listen: false)
+                                .login(
+                                    email: _emailController.text,
+                                    password: _passwordController.text);
                           },
-                          child: const Text("Forgot Password"),
                         ),
                         const Text("Dont have an account?"),
                         TextButton(

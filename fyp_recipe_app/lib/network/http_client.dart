@@ -1,17 +1,31 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class RecipeSearchHttpClient {
-  Future get({required String url}) async {
+  Future<dynamic> get({required String url}) async {
     try {
-      return await http.get(
+      print("http called");
+      final response = await http.get(
         Uri.parse(url),
         headers: header(),
       );
+      log("Request Url is ${response.request!.url.toString()}");
+      log("Status code${response.statusCode}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      }
+      if (response.statusCode == 490) {
+        throw Exception(jsonDecode(response.body)['message']);
+      }
+      throw Exception("error occured");
     } on Exception {
+      debugPrint("exeption occured");
       rethrow;
+    } catch (e) {
+      debugPrint("error is $e");
     }
   }
 
@@ -28,7 +42,8 @@ class RecipeSearchHttpClient {
       );
       log("Request Url is ${response.request!.url.toString()}");
       log("Status code${response.statusCode}");
-      if (response.statusCode == 200) {
+      log("Reponse body is ${response.body}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(response.body);
       }
       if (response.statusCode == 490) {
@@ -36,10 +51,10 @@ class RecipeSearchHttpClient {
       }
       throw Exception("error occured");
     } on Exception {
-      print("exeption occured");
+      debugPrint("exeption occured");
       rethrow;
     } catch (e) {
-      print("error is $e");
+      debugPrint("error is $e");
     }
   }
 

@@ -1,12 +1,12 @@
-import 'dart:convert';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 
 import '../models/user_model.dart';
 import '../network/api_response.dart';
-import '../screens/home_page.dart';
+
 import '../services/auth_service.dart';
 
 class LoginProvider with ChangeNotifier {

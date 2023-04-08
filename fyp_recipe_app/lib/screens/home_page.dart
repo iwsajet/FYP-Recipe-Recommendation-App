@@ -3,13 +3,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/bottom_nav_bar.dart';
 import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
+import 'package:fyp_recipe_app/screens/recipelist_screen.dart';
 import 'package:fyp_recipe_app/screens/recipetype_screen.dart';
 import 'package:fyp_recipe_app/screens/search_result_page.dart';
 import 'package:provider/provider.dart';
-
-import '../custom_widget/search_bar.dart';
 import '../custom_widget/top_bar.dart';
-import '../network/api_response.dart';
+import '../models/recipe_typeModel.dart';
+import '../provider/recipe_type_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     searchController = TextEditingController();
     searchProvider = context.read<GetSearchProvider>();
-    searchProvider.addListener(searchListner);
     super.initState();
   }
 
@@ -33,17 +32,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     searchController.dispose();
     super.dispose();
-  }
-
-  void searchListner() {
-    if (searchProvider.getSearchResponse.status == Status.error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(searchProvider.getSearchResponse.error.toString())));
-    } else if (searchProvider.getSearchResponse.status == Status.success) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: ((context) => const SearchResult())),
-      );
-    }
   }
 
   @override
@@ -95,14 +83,26 @@ class _HomePageState extends State<HomePage> {
               height: 100,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  HomePageCards(
-                    image: 'assets/icons/ratings.png',
-                    title: 'Recommended',
+                children: [
+                  GestureDetector(
+                    child: const HomePageCards(
+                      image: 'assets/icons/ratings.png',
+                      title: 'Recommended',
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const RecipeList()));
+                    },
                   ),
-                  HomePageCards(
-                    image: 'assets/icons/quality.png',
-                    title: 'Top Rated',
+                  GestureDetector(
+                    child: const HomePageCards(
+                      image: 'assets/icons/quality.png',
+                      title: 'Top Rated',
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const RecipeList()));
+                    },
                   )
                 ],
               ),
@@ -111,53 +111,24 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
               child: SizedBox(
             child: StaggeredGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RecipeListView()));
-                  },
-                  child: const RecipeTypeCard(
-                      image: 'assets/icons/breakfast.png', title: "Breakfast"),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RecipeListView()));
-                    },
-                    child: const RecipeTypeCard(
-                        image: 'assets/icons/meal.png', title: "Lunch")),
-                GestureDetector(
-                  child: const RecipeTypeCard(
-                      image: 'assets/icons/dinner.png', title: "Dinner"),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RecipeListView()));
-                    },
-                    child: const RecipeTypeCard(
-                        image: 'assets/icons/bake.png', title: "Baking")),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RecipeListView()));
-                  },
-                  child: const RecipeTypeCard(
-                      image: 'assets/icons/hot-soup.png', title: "Soup"),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RecipeListView()));
-                    },
-                    child: const RecipeTypeCard(
-                        image: 'assets/icons/diet.png', title: "Diet"))
-              ],
-            ),
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+                children: recipeTypes
+                    .map(
+                      (e) => GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RecipeListView()));
+                          context
+                              .read<GetRecipeByTypeProvider>()
+                              .getRecipebyType(keyword: e.title);
+                        },
+                        child:
+                            RecipeTypeCard(image: e.imageurl, title: e.title),
+                      ),
+                    )
+                    .toList()),
           ))
         ],
       ),
@@ -178,29 +149,24 @@ class HomePageCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: GestureDetector(
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: AppColor.secondary),
-          child: Row(
-            children: [
-              Image.asset(
-                image,
-                height: 30,
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14), color: AppColor.secondary),
+        child: Row(
+          children: [
+            Image.asset(
+              image,
+              height: 30,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            )
+          ],
         ),
       ),
     );
@@ -220,32 +186,27 @@ class RecipeTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: GestureDetector(
-        onTap: () {},
-        child: Container(
-          // padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 100),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: AppColor.secondary),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.bold),
-                ),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14), color: AppColor.secondary),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              Image.asset(
-                image,
-                height: 100,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Image.asset(
+              image,
+              height: 100,
+            ),
+          ],
         ),
       ),
     );

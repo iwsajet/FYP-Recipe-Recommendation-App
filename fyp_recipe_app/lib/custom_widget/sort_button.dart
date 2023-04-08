@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../network/api_response.dart';
+import '../provider/sort_provider.dart';
 
 class SortByDropdown extends StatefulWidget {
   const SortByDropdown({super.key});
@@ -9,6 +13,23 @@ class SortByDropdown extends StatefulWidget {
 
 class _SortByDropdownState extends State<SortByDropdown> {
   String? dropdownValue;
+  late final SortProvider sortProvider;
+  @override
+  void initState() {
+    sortProvider = context.read<SortProvider>();
+    sortProvider.addListener(sortListener);
+    super.initState();
+  }
+
+  void sortListener() async {
+    if (sortProvider.sortResponse.status == Status.error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(sortProvider.sortResponse.error.toString())));
+    } else if (sortProvider.sortResponse.status == Status.success) {
+      ScaffoldMessenger.of(context)
+      .showSnackBar(const SnackBar(content: Text("Soted.")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

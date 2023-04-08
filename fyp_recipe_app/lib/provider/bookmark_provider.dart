@@ -1,25 +1,49 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:fyp_recipe_app/network/api_response.dart';
-// import 'package:fyp_recipe_app/services/auth_service.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:fyp_recipe_app/network/api_response.dart';
+import 'package:fyp_recipe_app/services/bookmark_service.dart';
 
-// class BookmarkProvider with ChangeNotifier {
-//   late final AuthService _authService;
+import '../models/recipe_model.dart';
 
-//   BookmarkProvider({required AuthService authService}) {
-//     _authService = authService;
-//   }
-//   ApiResponse<void> postResponse = ApiResponse.loading();
-//   Future<void> report(
-//       {required String fullname,
-//       required String report}) async {
-//     try {
-//       await _authService.reportRecipe(
-       
-//        fullname: fullname, report: report
-//       );
-//     } catch (e) {
-//       postResponse = ApiResponse.error(e.toString());
-//       notifyListeners();
-//     }
-//   }
-// }
+class BookmarkProvider with ChangeNotifier {
+  late final BookmarkService _bookmarkService;
+
+  BookmarkProvider({required BookmarkService bookmarkService}) {
+    _bookmarkService = bookmarkService;
+  }
+  ApiResponse<void> bookmarkResponse = ApiResponse.loading();
+  Future<void> bookmark(
+      {required String recipeID, required String userId}) async {
+    try {
+      final response = await _bookmarkService.bookmarkRecipe(
+        recipeID: recipeID,
+        userId: userId,
+      );
+      bookmarkResponse = ApiResponse.success(null);
+      notifyListeners();
+    } catch (e) {
+      bookmarkResponse = ApiResponse.error(e.toString());
+      notifyListeners();
+    }
+  }
+}
+
+class GetBookmarkProvider with ChangeNotifier {
+  late final BookmarkService _bookmarkService;
+
+  GetBookmarkProvider({required BookmarkService bookmarkService}) {
+    _bookmarkService = bookmarkService;
+  }
+  ApiResponse<List<RecipeModel>> getbookmarkResponse = ApiResponse.loading();
+  Future<void> getbookmark(
+      {required String recipeID, required String userId}) async {
+    try {
+      final response =
+          await _bookmarkService.getbookmarkRecipe(recipeID: '', userId: '');
+      getbookmarkResponse = ApiResponse.success(response);
+      notifyListeners();
+    } catch (e) {
+      getbookmarkResponse = ApiResponse.error(e.toString());
+      notifyListeners();
+    }
+  }
+}

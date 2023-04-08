@@ -1,16 +1,23 @@
 class UserModel {
+  String id;
   String email;
   String password;
-  String? fullname;
+  String fullname;
   String? username;
   UserModel(
-      {required this.email,
+      {required this.id,
+      required this.email,
       required this.password,
-      this.fullname,
+      required this.fullname,
       this.username});
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
     print(map);
-    return UserModel(email: map['email'], password: map['password']);
+    return UserModel(
+      id: map['_id'],
+      fullname: map['fullname'],
+      email: map['email'],
+      password: map['password'],
+    );
   }
 }

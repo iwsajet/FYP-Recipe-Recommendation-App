@@ -2,70 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/ingredient_model.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
-// class IngredientRow extends StatefulWidget {
-//   const IngredientRow({Key? key}) : super(key: key);
 
-//   @override
-//   _IngredientRowState createState() => _IngredientRowState();
-// }
-
-// class _IngredientRowState extends State<IngredientRow> {
-//   final TextEditingController _nameController = TextEditingController();
-//   final TextEditingController _quantityController = TextEditingController();
-//   final List<Ingredient> _ingredientsList = [];
-
-//   @override
-//   void dispose() {
-//     _nameController.dispose();
-//     _quantityController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Expanded(
-//           child: TextField(
-//             controller: _nameController,
-//             decoration: InputDecoration(
-//               hintText: 'Ingredient name',
-//             ),
-//           ),
-//         ),
-//         SizedBox(width: 8.0),
-//         Expanded(
-//           child: TextField(
-//             controller: _quantityController,
-//             decoration: InputDecoration(
-//               hintText: 'Quantity',
-//             ),
-//           ),
-//         ),
-//         SizedBox(width: 8.0),
-//         IconButton(
-//           icon: Icon(Icons.add),
-//           onPressed: () {
-//             setState(() {
-//                _ingredientsList
-//                        .add(Ingredient(quantity: '', name: ''));
-//               // Add a new ingredient row
-//             });
-//           },
-//         ),
-//         IconButton(
-//           icon: Icon(Icons.remove),
-//           onPressed: () {
-//             setState(() {
-//                _ingredientsList.removeAt(index);
-//               // Remove this ingredient row
-//             });
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
+// ignore: must_be_immutable
 class IngredientFormItemWidget extends StatefulWidget {
   IngredientFormItemWidget({
     Key? key,
@@ -84,9 +22,9 @@ class IngredientFormItemWidget extends StatefulWidget {
     return state;
   }
 
-  TextEditingController _ingredientController = TextEditingController();
-  TextEditingController _quantityController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _ingredientController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   bool isValidated() => state.validate();
 }
@@ -119,7 +57,7 @@ class _IngredientFormItemWidgetState extends State<IngredientFormItemWidget> {
                     TextButton(
                         onPressed: () {
                           setState(() {
-                            //Clear All forms Data
+                            //Clear Data
                             widget.ingredientModel.name = "";
                             widget.ingredientModel.quantity = "";
                             widget._ingredientController.clear();
@@ -133,7 +71,7 @@ class _IngredientFormItemWidgetState extends State<IngredientFormItemWidget> {
                         )),
                     TextButton(
                         onPressed: () => widget.onRemove(),
-                        child: Text(
+                        child: const Text(
                           "Remove",
                           style: TextStyle(color: AppColor.secondary),
                         )),
@@ -143,7 +81,7 @@ class _IngredientFormItemWidgetState extends State<IngredientFormItemWidget> {
             ),
             TextFormField(
               controller: widget._ingredientController,
-              // initialValue: widget.contactModel.name,
+
               onChanged: (value) => widget.ingredientModel.name = value,
               onSaved: (value) => widget.ingredientModel.name = value!,
               validator: (value) {
@@ -152,7 +90,7 @@ class _IngredientFormItemWidgetState extends State<IngredientFormItemWidget> {
               },
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                // border: OutlineInputBorder(),
+
                 hintText: "Enter Ingrdient Name",
                 labelText: "Ingredient Name",
               ),
@@ -172,7 +110,7 @@ class _IngredientFormItemWidgetState extends State<IngredientFormItemWidget> {
               },
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                // border: OutlineInputBorder(),
+
                 hintText: "Enter Quantity",
                 labelText: "Quantity",
               ),

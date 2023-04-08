@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _fullnameController.dispose();
     _usernameController.dispose();
-    signUpProvider.dispose();
+   // signUpProvider.dispose();
 
     super.dispose();
   }
@@ -67,9 +67,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-  UserModel user =
-      UserModel(email: '', password: '', fullname: '', username: '');
 
   @override
   Widget build(BuildContext context) {
@@ -174,34 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                           ),
                         ),
-                        // Container(
-                        //   child: TextFormField(
-                        //     obscureText: _isObscured,
-                        //     controller: _confirmpwController,
-                        //     decoration: InputDecoration(
-                        //         suffixIcon: IconButton(
-                        //             onPressed: () {
-                        //               setState(() {
-                        //                 _isObscured = !_isObscured;
-                        //               });
-                        //             },
-                        //             icon: _isObscured
-                        //                 ? const Icon(Icons.visibility)
-                        //                 : const Icon(Icons.visibility_off)),
-                        //         enabledBorder: const UnderlineInputBorder(
-                        //             borderSide: BorderSide(
-                        //                 width: 2, color: AppColor.secondary)),
-                        //         labelText: 'Confirm Password',
-                        //         hintText: 'Confirm Password'),
-                        //     validator: (value) {
-                        //       if (value!.isEmpty) {
-                        //         return "Required";
-                        //       } else {
-                        //         return null;
-                        //       }
-                        //     },
-                        //   ),
-                        // ),
+                    
                         const SizedBox(
                           height: 20,
                         ),
@@ -216,10 +186,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   password: _passwordController.text,
                                   fullname: _fullnameController.text);
                             },
-                            //onTap:(){register_user()}
+                        
                           ),
                         ),
                         Container(
+                          padding: const EdgeInsets.all(10),
                           child: TextButton(
                             child: const Text("Already Registered? Login Now."),
                             onPressed: () {

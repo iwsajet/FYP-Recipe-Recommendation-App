@@ -2,44 +2,94 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
+import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../network/api_response.dart';
 
 class ProfileTopBar extends StatelessWidget {
   const ProfileTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
+    return Consumer<LoginProvider>(builder: (context, value, child) {
+      if (value.loginResponse.status == Status.success) {
+        final users = value.loginResponse.data!;
+
+        return Stack(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80'),
+            Column(
+              children: [
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80'),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    children: [
+                      Text(
+                        users.fullname,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                children: const [Text("Jane Doe"), Text('@janedoe')],
+            Positioned(
+              bottom: 2,
+              right: 90,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: ((builder) => const BottomSheet()));
+                },
+                child: const Icon(Icons.camera_alt),
               ),
-            )
+            ),
           ],
-        ),
-        Positioned(
-          bottom: 2,
-          right: 90,
-          child: InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: ((builder) => const BottomSheet()));
-            },
-            child: Icon(Icons.camera_alt),
+        );
+      }
+      return Stack(
+        children: [
+          Column(
+            children: [
+              const CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80'),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: const [
+                    Text("Jane Doe"
+                        ),
+                  ],
+                ),
+              )
+            ],
           ),
-        ),
-      ],
-    );
+          Positioned(
+            bottom: 2,
+            right: 90,
+            child: InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: ((builder) => const BottomSheet()));
+              },
+              child: const Icon(Icons.camera_alt),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -73,8 +123,8 @@ class _BottomSheetState extends State<BottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       width: AppSizes.s10,
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 130,top: 30),
-      height: AppSizes.s10 * 0.15,
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 130, top: 30),
+      height: AppSizes.s10 * 11,
       child: Column(children: [
         const Text(
           "Choose image from",

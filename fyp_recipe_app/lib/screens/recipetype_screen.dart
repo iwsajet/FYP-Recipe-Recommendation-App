@@ -1,58 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_recipe_app/models/recipe_model.dart';
 import 'package:fyp_recipe_app/provider/recipe_type_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 
-import '../network/api_const.dart';
+import '../network/api_response.dart';
 
 class RecipeListView extends StatefulWidget {
+  const RecipeListView({super.key});
+
   @override
   _RecipeListViewState createState() => _RecipeListViewState();
 }
 
 class _RecipeListViewState extends State<RecipeListView> {
-  List<dynamic> recipes = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Recipes'),
+          title: const Text('Recipes'),
         ),
         body:
             Consumer<GetRecipeByTypeProvider>(builder: (context, value, child) {
-          return ListView.builder(
-            itemCount: recipes.length,
-            itemBuilder: (BuildContext context, int index) {
-              // RecipeModel recipe = GetRecipeByTypeProvider(authService: authService).recipes[index];
-              final recipe = recipes[index];
-              return ListTile(
-                leading: Image.network(recipe['imageURL']),
-                title: Text(recipe['name']),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(recipe['type']),
-                    Text(recipe['description']),
-                    Text('Prep Time: ${recipe['preptime'].toString()} minutes'),
-                  ],
-                ),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // navigate to recipe detail page
-                },
-              );
-            },
-          );
+          if (value.getRecipeByTypeResponse.status == Status.success) {
+            final recipes = value.getRecipeByTypeResponse.data!;
+            return ListView.builder(
+              itemCount: recipes.length,
+              itemBuilder: (BuildContext context, int index) {
+                final recipe = recipes[index];
+                return ListTile(
+                  leading: recipe.imageURL != null
+                      ? Image.network(recipe.imageURL!.startsWith('http')
+                          ? recipe.imageURL!
+                          : 'http://192.168.1.124:3000' + recipe.imageURL!)
+                      : const Icon(Icons.image_not_supported),
+                  title: Text(recipe.name),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(recipe.recipeType),
+                      Text(recipe.description),
+                      Text('Prep Time: ${recipe.preptime.toString()} minutes'),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecipePage(
+                              clickedrecipe: recipes[index],
+                            )));
+                  },
+                );
+              },
+            );
+          }
+          return const SizedBox();
         }));
   }
 }

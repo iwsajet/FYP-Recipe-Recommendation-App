@@ -26,7 +26,7 @@ class RecipeCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => RecipePage()));
+            context, MaterialPageRoute(builder: (context) => RecipePage(clickedrecipe: recipedata,)));
       },
       child: Row(
         children: [

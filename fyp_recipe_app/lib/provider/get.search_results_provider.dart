@@ -1,26 +1,26 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/models/recipe_model.dart';
 import 'package:fyp_recipe_app/network/api_response.dart';
 
-import '../services/auth_service.dart';
+
+import '../services/search_service.dart';
 
 class GetSearchProvider with ChangeNotifier {
-  late final AuthService _authService;
-  GetSearchProvider({required AuthService authService}) {
-    _authService = authService;
+  late final SearchService _searchService;
+  GetSearchProvider({required SearchService searchService}) {
+    _searchService = searchService;
   }
   ApiResponse<List<RecipeModel>> getSearchResponse = ApiResponse.loading();
 
-  Future<void> searchRecipe(
-      {
-      //File? recipePic,
-      required String keyword}) async {
+  Future<void> searchRecipe({required String keyword}) async {
     try {
-      await _authService.searchRecipe(keyword: keyword);
-    } catch (e) {
-      getSearchResponse = ApiResponse.error(e.toString());
+      final response = await _searchService.searchRecipe(keyword: keyword);
+      getSearchResponse = ApiResponse.success(response);
+      notifyListeners();
+    } on Exception {
+      getSearchResponse = ApiResponse.error("Something went wrong");
       notifyListeners();
     }
   }
