@@ -62,7 +62,7 @@ class _KebabMenuWidgetState extends State<KebabMenuWidget> {
                 final result = await showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    String reportMessage = '';
+                    
 
                     return AlertDialog(
                       title: const Text('Report'),

@@ -8,11 +8,15 @@ class SearchService {
   SearchService({required RecipeSearchHttpClient client}) {
     _client = client;
   }
-    Future<List<RecipeModel>> searchRecipe({required String keyword}) async {
+  Future<List<RecipeModel>> searchRecipe({
+    required List<String> ingredientNames,
+  }) async {
+    final keywordString = ingredientNames.join(',');
     final response = await _client.get(
-        url: "${ApiConst.baseURL}searchByIngredient?keyword=$keyword");
+        url: "${ApiConst.baseURL}searchByIngredient?keyword=$keywordString");
 
     return (response as List<dynamic>)
         .map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
         .toList();
-  }}
+  }
+}

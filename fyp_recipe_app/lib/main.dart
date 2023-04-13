@@ -38,6 +38,7 @@ void main() async {
   final SearchService searchService = SearchService(client: httpClient);
   final RateService rateService = RateService(client: httpClient);
   final SortService sortService = SortService(client: httpClient);
+  
 
   Provider.debugCheckInvalidValueType = null;
   runApp(MyApp(

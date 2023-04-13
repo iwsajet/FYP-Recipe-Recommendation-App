@@ -12,6 +12,7 @@ class CommentWidget extends StatefulWidget {
   });
   final String recipeId;
   @override
+  // ignore: library_private_types_in_public_api
   _CommentWidgetState createState() => _CommentWidgetState();
 }
 
@@ -60,12 +61,12 @@ class _CommentWidgetState extends State<CommentWidget> {
               context.read<CommentProvider>().comment(
                     comment: _commentController.text,
                     recipeId: widget.recipeId,
-                    userId: '',
+                    userId: '', 
                   );
               setState(() {
                 final comment = _commentController.text.trim();
                 if (comment.isNotEmpty) {
-                  _comments.add('$comment');
+                  _comments.add(comment);
 
                   _commentController.clear();
                 }
@@ -84,13 +85,13 @@ class _CommentWidgetState extends State<CommentWidget> {
           ),
         ),
         SliverPadding(
-          padding: EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 10),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return Text(
                   _comments[index],
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 );
               },
               childCount: _comments.length,

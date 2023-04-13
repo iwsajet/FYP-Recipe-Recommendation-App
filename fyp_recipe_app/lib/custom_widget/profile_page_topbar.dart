@@ -1,15 +1,79 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_response.dart';
 
-class ProfileTopBar extends StatelessWidget {
-  const ProfileTopBar({super.key});
+class ProfileTopBar extends StatefulWidget {
+  const ProfileTopBar({
+    super.key,
+  });
+
+  @override
+  State<ProfileTopBar> createState() => _ProfileTopBarState();
+}
+
+class _ProfileTopBarState extends State<ProfileTopBar> {
+  late String username = '';
+
+  late String pickedImage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'Guest';
+      pickedImage = prefs.getString('imagePath') ?? '';
+    });
+  }
+
+  Future<void> _selectImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        pickedImage = pickedFile.path;
+      });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('imagePath', pickedFile.path);
+    }
+  }
+
+  Future<void> _editusername() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController(text: username);
+        return AlertDialog(
+          title: const Text('Edit Username'),
+          content: TextField(controller: controller),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(controller.text);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+    if (result != null) {
+      setState(() {
+        username = result;
+      });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', result);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +85,26 @@ class ProfileTopBar extends StatelessWidget {
           children: [
             Column(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80'),
+                  backgroundImage: pickedImage.isNotEmpty
+                      ? FileImage(File(pickedImage))
+                      : const NetworkImage(
+                              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80')
+                          as ImageProvider<Object>,
+                ),
+                Positioned(
+                  bottom: 1,
+                  right: 50,
+                  child: InkWell(
+                    onDoubleTap: _selectImage,
+                    // onTap: () {
+                    //   showModalBottomSheet(
+                    //       context: context,
+                    //       builder: ((builder) => const BottomSheet()));
+                    // },
+                    child: const Icon(Icons.camera_alt),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.topCenter,
@@ -37,58 +117,93 @@ class ProfileTopBar extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 95),
+                  child: Row(children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Username: $username',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                        onPressed: _editusername,
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ))
+                  ]),
                 )
               ],
-            ),
-            Positioned(
-              bottom: 2,
-              right: 90,
-              child: InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: ((builder) => const BottomSheet()));
-                },
-                child: const Icon(Icons.camera_alt),
-              ),
             ),
           ],
         );
       }
-      return Stack(
-        children: [
-          Column(
-            children: [
-              const CircleAvatar(
-                radius: 40,
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80'),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: const [
-                    Text("Jane Doe"
-                        ),
-                  ],
+      return  Stack(
+          children: [
+            Column(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: pickedImage.isNotEmpty
+                      ? FileImage(File(pickedImage))
+                      : const NetworkImage(
+                              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80')
+                          as ImageProvider<Object>,
                 ),
-              )
-            ],
-          ),
-          Positioned(
-            bottom: 2,
-            right: 90,
-            child: InkWell(
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => const BottomSheet()));
-              },
-              child: const Icon(Icons.camera_alt),
+                Positioned(
+                  bottom: 1,
+                  right: 50,
+                  child: InkWell(
+                    onDoubleTap: _selectImage,
+                    // onTap: () {
+                    //   showModalBottomSheet(
+                    //       context: context,
+                    //       builder: ((builder) => const BottomSheet()));
+                    // },
+                    child: const Icon(Icons.camera_alt),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    children: const [
+                      Text(
+                        "Guest",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 95),
+                  child: Row(children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Username: $username',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                        onPressed: _editusername,
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ))
+                  ]),
+                )
+              ],
             ),
-          ),
-        ],
-      );
+          ],
+        );
     });
   }
 }
@@ -102,7 +217,7 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   late PickedFile imageFile;
-  final ImagePicker _picker = ImagePicker();
+
   File? pickedImage;
   Future pickImage(ImageSource imageType) async {
     try {

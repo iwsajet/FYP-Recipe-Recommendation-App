@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class RecipeModel {
   RecipeModel({
     this.recipePic,
@@ -28,7 +26,7 @@ class RecipeModel {
         id: map['_id'],
         recipePic: map['recipePic'],
         name: map['name'],
-        recipeType: map['type'],
+        recipeType: map['type'] ?? 'test',
         description: map['description'],
         ingredients: (map['ingredients'] as List<dynamic>)
             .map((e) => RecipeIngredientModel.fromMap(e))
@@ -36,7 +34,7 @@ class RecipeModel {
         instruction: (map['instructions'] as List<dynamic>)
             .map((e) => e as String)
             .toList(),
-        preptime: map['preptime'],
+        preptime: map['preptime'] ?? 0,
         imageURL: map['imageURL']);
   }
 }

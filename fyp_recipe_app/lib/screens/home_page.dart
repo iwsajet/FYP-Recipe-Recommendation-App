@@ -8,7 +8,7 @@ import 'package:fyp_recipe_app/screens/recipetype_screen.dart';
 import 'package:fyp_recipe_app/screens/search_result_page.dart';
 import 'package:provider/provider.dart';
 import '../custom_widget/top_bar.dart';
-import '../models/recipe_typeModel.dart';
+import '../models/recipe_type_model.dart';
 import '../provider/recipe_type_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: CustomScrollView(
         // padding: const EdgeInsets.all(20),
         slivers: [
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SearchResult()));
+                  MaterialPageRoute(builder: (context) => const SearchResult()));
             },
           )),
           SliverToBoxAdapter(

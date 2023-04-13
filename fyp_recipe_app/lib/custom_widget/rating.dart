@@ -36,47 +36,46 @@ class _RatingState extends State<Rating> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Rate the recipe:',
-              style: TextStyle(fontSize: 20.0),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'Rate the recipe:',
+            style: TextStyle(fontSize: 20.0),
           ),
-          RatingBar(
-              initialRating: 0,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              ratingWidget: RatingWidget(
-                  full: const Icon(Icons.star, color: Colors.orange),
-                  half: const Icon(
-                    Icons.star_half,
-                    color: Colors.orange,
-                  ),
-                  empty: const Icon(
-                    Icons.star_outline,
-                    color: Colors.orange,
-                  )),
-              onRatingUpdate: (value) {
-                setState(() {
-                  _ratingValue = value;
-                });
-              }),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-              child: const Text('Submit Rating'),
-              onPressed: () {
-                context.read<RateRecipeProvider>().rate(
-                      rating: _ratingValue,
-                      recipeID: widget.recipeId,
-                    );
-              }),
-        ],
-      ),
+        ),
+        RatingBar(
+            initialRating: 0,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            ratingWidget: RatingWidget(
+                full: const Icon(Icons.star, color: Colors.orange),
+                half: const Icon(
+                  Icons.star_half,
+                  color: Colors.orange,
+                ),
+                empty: const Icon(
+                  Icons.star_outline,
+                  color: Colors.orange,
+                )),
+            onRatingUpdate: (value) {
+              setState(() {
+                _ratingValue = value;
+              });
+            }),
+        const SizedBox(height: 16.0),
+        ElevatedButton(
+            child: const Text('Submit Rating'),
+            onPressed: () {
+              context.read<RateRecipeProvider>().rate(
+                    rating: _ratingValue,
+                    recipeID: widget.recipeId,
+                  );
+            }),
+      ],
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:fyp_recipe_app/provider/post_recipe_provider.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,7 @@ import 'package:http/http.dart' as http;
 import '../custom_widget/ingredient_row.dart';
 import '../models/ingredient_model.dart';
 import '../network/api_response.dart';
-
+import 'package:http_parser/http_parser.dart';
 
 class PostRecipe extends StatefulWidget {
   const PostRecipe({super.key});
@@ -31,10 +30,10 @@ class _PostRecipeState extends State<PostRecipe> {
   late final TextEditingController quantityController;
   late final TextEditingController nameController;
   late final TextEditingController descriptionController;
-  late final TextEditingController preparationTimeController;
+  late final TextEditingController preptimeController;
 
   late final PostRecipeProvider postRecipeProvider;
-  File? pickedImage;
+  XFile? pickedImage;
   int index = 0;
   List<String> _instructions = [];
   List<IngredientFormItemWidget> ingredientForms = List.empty(growable: true);
@@ -43,10 +42,10 @@ class _PostRecipeState extends State<PostRecipe> {
     try {
       final photo = await ImagePicker().pickImage(source: imageType);
       if (photo == null) return;
-      final tempImage = File(photo.path);
+
       setState(
         () {
-          pickedImage = tempImage;
+          pickedImage = photo;
         },
       );
     } catch (error) {
@@ -83,7 +82,7 @@ class _PostRecipeState extends State<PostRecipe> {
     quantityController = TextEditingController();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
-    preparationTimeController = TextEditingController();
+    preptimeController = TextEditingController();
 
     postRecipeProvider = context.read<PostRecipeProvider>();
     postRecipeProvider.addListener(postRecipeListener);
@@ -94,7 +93,7 @@ class _PostRecipeState extends State<PostRecipe> {
     if (recipeNameController.text.isEmpty ||
         recipeTypeController.text.isEmpty ||
         descriptionController.text.isEmpty ||
-        preparationTimeController.text.isEmpty ||
+        preptimeController.text.isEmpty ||
         pickedImage == null) {
       // Show error messageif fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
@@ -110,7 +109,7 @@ class _PostRecipeState extends State<PostRecipe> {
     final name = recipeNameController.text;
     final recipeType = recipeTypeController.text;
     final description = descriptionController.text;
-    final preptime = preparationTimeController.text;
+    final preptime = preptimeController.text;
     final instruction = _instructions;
 
     if (_instructions.isNotEmpty && _formKey.currentState!.validate()) {
@@ -122,43 +121,45 @@ class _PostRecipeState extends State<PostRecipe> {
       try {
         final bytes = await pickedImage!.readAsBytes();
 
-        final uri = Uri.parse('http://192.168.0.197:3000/postRecipe');
+        final uri = Uri.parse('http://192.168.1.56:3000/postRecipe');
         final request = http.MultipartRequest('POST', uri);
-       request.fields['userId'] =context.read<LoginProvider>().loginResponse.data!.id;
+        request.fields['userId'] =
+            context.read<LoginProvider>().loginResponse.data!.id;
         request.fields['name'] = name;
-        request.fields['recipeType'] = recipeType;
-        request.fields['description'] = preptime;
-        request.fields['preptime'] = description;
+        request.fields['type'] = recipeType;
+        request.fields['preptime'] = preptime;
+        request.fields['description'] = description;
         for (int i = 0; i < instruction.length; i++) {
           request.fields['instructions[$i]'] = instruction[i];
         }
 
         request.fields['ingredients'] = jsonEncode(formatedIngredient);
-        request.files.add(http.MultipartFile.fromBytes(
-          'file',
-          bytes,
-          filename: pickedImage!.path.split('/').last,
-          //contentType: MediaType.parse(pickedImage!.mimeType!),
-        ));
+        request.files.add(http.MultipartFile.fromBytes('file', bytes,
+            filename: pickedImage!.path.split('/').last.split('.').first,
+            contentType: MediaType('image', pickedImage!.path.split('.').last)
+            //contentType: MediaType.parse(pickedImage!.mimeType!),
+            ));
         final response = await request.send();
 
         log(await response.stream.bytesToString());
         log(await response.statusCode.toString());
 
         if (response.statusCode == 200) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Recipe added successfully.'),
             ),
           );
         } else {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Recipe addition failed.'),
             ),
           );
         }
-      } catch (e) {
+      } on Exception catch (e) {
         log(e.toString());
       }
     }
@@ -170,7 +171,7 @@ class _PostRecipeState extends State<PostRecipe> {
           content: Text(postRecipeProvider.postResponse.error.toString())));
     } else if (postRecipeProvider.postResponse.status == Status.success) {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage()));
+          .push(MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 
@@ -179,7 +180,7 @@ class _PostRecipeState extends State<PostRecipe> {
     recipeNameController.dispose();
     recipeTypeController.dispose();
     descriptionController.dispose();
-    preparationTimeController.dispose();
+    preptimeController.dispose();
 
     super.dispose();
   }
@@ -222,7 +223,7 @@ class _PostRecipeState extends State<PostRecipe> {
                           height: 180,
                           width: double.infinity,
                           child: pickedImage != null
-                              ? Image.file(pickedImage as File)
+                              ? Image.file(File(pickedImage!.path))
                               : IconButton(
                                   icon: const Icon(Icons.camera_alt_outlined),
                                   onPressed: () {
@@ -262,7 +263,7 @@ class _PostRecipeState extends State<PostRecipe> {
                         onPressed: () {
                           onAdd();
                         },
-                        icon: Icon(Icons.add)),
+                        icon: const Icon(Icons.add)),
                     ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -271,7 +272,7 @@ class _PostRecipeState extends State<PostRecipe> {
                           return ingredientForms[index];
                         }),
                     TextFormField(
-                      controller: preparationTimeController,
+                      controller: preptimeController,
                       decoration: const InputDecoration(
                           labelText: "Preparation time",
                           hintText:
@@ -315,7 +316,6 @@ class _PostRecipeState extends State<PostRecipe> {
                       child: const Text("Post"),
                       onPressed: () {
                         _postRecipe();
-                       
                       },
                     )
                   ],

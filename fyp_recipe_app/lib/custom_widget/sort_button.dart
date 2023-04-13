@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:provider/provider.dart';
 
 import '../network/api_response.dart';
@@ -8,6 +9,7 @@ class SortByDropdown extends StatefulWidget {
   const SortByDropdown({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SortByDropdownState createState() => _SortByDropdownState();
 }
 
@@ -27,7 +29,7 @@ class _SortByDropdownState extends State<SortByDropdown> {
           SnackBar(content: Text(sortProvider.sortResponse.error.toString())));
     } else if (sortProvider.sortResponse.status == Status.success) {
       ScaffoldMessenger.of(context)
-      .showSnackBar(const SnackBar(content: Text("Soted.")));
+          .showSnackBar(const SnackBar(content: Text("Soted.")));
     }
   }
 
@@ -38,18 +40,20 @@ class _SortByDropdownState extends State<SortByDropdown> {
       icon: const Icon(Icons.arrow_drop_down),
       iconSize: 24,
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
+      style: const TextStyle(color: Color.fromARGB(255, 27, 76, 29)),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: const Color.fromARGB(255, 27, 76, 29),
       ),
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue;
         });
       },
-      items: <String>['Sort by preparation time', 'Sort by rating']
-          .map<DropdownMenuItem<String>>((String value) {
+      items: <String>[
+        'Sort by rating',
+        'Sort by preparation time',
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

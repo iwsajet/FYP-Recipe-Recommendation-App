@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class RecipeSearchHttpClient {
   Future<dynamic> get({required String url}) async {
     try {
-      print("http called");
+      debugPrint("http called");
       final response = await http.get(
         Uri.parse(url),
         headers: header(),
@@ -34,7 +34,7 @@ class RecipeSearchHttpClient {
     required Map<String, dynamic> body,
   }) async {
     try {
-      print("http called");
+      debugPrint("http called");
       final response = await http.post(
         Uri.parse(url),
         body: jsonEncode(body),

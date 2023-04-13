@@ -1,10 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/models/recipe_model.dart';
 import 'package:fyp_recipe_app/network/api_response.dart';
-
-
 import '../services/search_service.dart';
 
 class GetSearchProvider with ChangeNotifier {
@@ -14,9 +10,9 @@ class GetSearchProvider with ChangeNotifier {
   }
   ApiResponse<List<RecipeModel>> getSearchResponse = ApiResponse.loading();
 
-  Future<void> searchRecipe({required String keyword}) async {
+  Future<void> searchRecipe({required List<String> ingredientNames,}) async {
     try {
-      final response = await _searchService.searchRecipe(keyword: keyword);
+      final response = await _searchService.searchRecipe(ingredientNames: ingredientNames );
       getSearchResponse = ApiResponse.success(response);
       notifyListeners();
     } on Exception {

@@ -12,12 +12,14 @@ class CommentService {
     required String comment,
     required String recipeId,
     required String userId,
+
   }) async {
     final response = await _client.post(
       url: "${ApiConst.baseURL}recipe/$recipeId/comment",
       body: {
         'comment': comment,
         'userId': userId,
+
       },
     );
     return CommentModel.fromJson(response);

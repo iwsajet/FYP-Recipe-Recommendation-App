@@ -5,8 +5,6 @@ import 'package:fyp_recipe_app/screens/login_page.dart';
 import 'package:provider/provider.dart';
 import '../app_properties.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
-import '../models/user_model.dart';
 import '../network/api_response.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -94,100 +92,79 @@ class _RegisterPageState extends State<RegisterPage> {
                     key: formkey,
                     child: Column(
                       children: [
-                        Container(
-                          // alignment: Alignment.center,
-                          child: const Text(
-                            "Register",
-                            style: TextStyle(
-                              color: AppColor.textColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                        const Text(
+                          "Register",
+                          style: TextStyle(
+                            color: AppColor.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                        Container(
-                          child: TextFormField(
-                            controller: _fullnameController,
-                            decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2, color: AppColor.secondary)),
-                                labelText: 'Full Name',
-                                hintText: 'Enter Full Name'),
-                          ),
+                        TextFormField(
+                          controller: _fullnameController,
+                          decoration: const InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 2, color: AppColor.secondary)),
+                              labelText: 'Full Name',
+                              hintText: 'Enter Full Name'),
                         ),
-                        // Container(
-                        //   child: TextFormField(
-                        //     controller: _usernameController,
-                        //     decoration: const InputDecoration(
-                        //         enabledBorder: UnderlineInputBorder(
-                        //             borderSide: BorderSide(
-                        //                 width: 2, color: AppColor.secondary)),
-                        //         labelText: 'Username',
-                        //         hintText: 'Enter valid username'),
-                        //   ),
-                        // ),
-                        Container(
-                          child: TextFormField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2, color: AppColor.secondary)),
-                                labelText: 'Email',
-                                hintText:
-                                    'Enter valid email id as abc@gmail.com'),
-                            validator: MultiValidator([
-                              RequiredValidator(errorText: "Required"),
-                              EmailValidator(errorText: "Not a Valid Email"),
-                            ]),
-                          ),
+                 
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 2, color: AppColor.secondary)),
+                              labelText: 'Email',
+                              hintText:
+                                  'Enter valid email id as abc@gmail.com'),
+                          validator: MultiValidator([
+                            RequiredValidator(errorText: "Required"),
+                            EmailValidator(errorText: "Not a Valid Email"),
+                          ]),
                         ),
-                        Container(
-                          child: TextFormField(
-                            controller: _passwordController,
-                            obscureText: _isObscured,
-                            decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscured = !_isObscured;
-                                      });
-                                    },
-                                    icon: _isObscured
-                                        ? const Icon(Icons.visibility)
-                                        : const Icon(Icons.visibility_off)),
-                                enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2, color: AppColor.secondary)),
-                                labelText: 'Password',
-                                hintText: 'Enter strong password'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Required";
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _isObscured,
+                          decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isObscured = !_isObscured;
+                                    });
+                                  },
+                                  icon: _isObscured
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off)),
+                              enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 2, color: AppColor.secondary)),
+                              labelText: 'Password',
+                              hintText: 'Enter strong password'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Required";
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                     
                         const SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(300, 50)),
-                            child: const Text("Register"),
-                            onPressed: () async {
-                              context.read<SignUpProvider>().signUp(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                  fullname: _fullnameController.text);
-                            },
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(300, 50)),
+                          child: const Text("Register"),
+                          onPressed: () async {
+                            context.read<SignUpProvider>().signUp(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                fullname: _fullnameController.text);
+                          },
                         
-                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.all(10),

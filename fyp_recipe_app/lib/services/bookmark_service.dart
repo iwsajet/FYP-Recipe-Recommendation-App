@@ -18,12 +18,12 @@ class BookmarkService {
     return ReportModel.fromJson(response);
   }
 
-  Future<List<RecipeModel>> getbookmarkRecipe(
-      {required String userId, required String recipeID}) async {
+  Future<List<RecipeModel>> getbookmarkRecipe({required String userId}) async {
     final response = await _client.get(
       url: "${ApiConst.baseURL}bookmarks/$userId",
     );
-    return (response as List<dynamic>)
+    print(response);
+    return (response['recipes'] as List<dynamic>)
         .map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }

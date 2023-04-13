@@ -28,17 +28,25 @@ class _RecipeListViewState extends State<RecipeListView> {
               itemBuilder: (BuildContext context, int index) {
                 final recipe = recipes[index];
                 return ListTile(
-                  leading: recipe.imageURL != null
-                      ? Image.network(recipe.imageURL!.startsWith('http')
-                          ? recipe.imageURL!
-                          : 'http://192.168.1.124:3000' + recipe.imageURL!)
-                      : const Icon(Icons.image_not_supported),
+                  leading: Container(
+                    width: 100,
+                    height: 100,
+                    child: recipe.imageURL != null
+                        ? Image.network(
+                            recipe.imageURL!.startsWith('http')
+                                ? recipe.imageURL!
+                                : 'http://192.168.1.124:3000' +
+                                    recipe.imageURL!,
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(Icons.image_not_supported),
+                  ),
                   title: Text(recipe.name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(recipe.recipeType),
-                      Text(recipe.description),
+                      Text('Type: ${recipe.recipeType}'),
+                      Text('Description: ${recipe.description}'),
                       Text('Prep Time: ${recipe.preptime.toString()} minutes'),
                     ],
                   ),

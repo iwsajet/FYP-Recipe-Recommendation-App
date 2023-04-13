@@ -3,7 +3,6 @@ import 'package:fyp_recipe_app/custom_widget/kebab_menu.dart';
 import 'package:fyp_recipe_app/provider/bookmark_provider.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../Network/api_const.dart';
 import '../app_properties.dart';
 import '../custom_widget/rating.dart';
@@ -19,7 +18,6 @@ class RecipePage extends StatefulWidget {
 }
 
 class _RecipePageState extends State<RecipePage> {
-  double? _ratingValue;
   bool isBookmarked = false;
   late final BookmarkProvider bookmarkProvider;
   final List<String> _comments = [];
@@ -53,16 +51,12 @@ class _RecipePageState extends State<RecipePage> {
     commentProvider.addListener(commentListner);
     super.initState();
   }
+
   @override
   void dispose() {
-    // TODO: implement dispose
+    bookmarkProvider.removeListener(bookmarkListner);
+    commentProvider.removeListener(commentListner);
     super.dispose();
-   
-  }
-  void toggleBookmark() {
-    setState(() {
-      isBookmarked = !isBookmarked;
-    });
   }
 
   @override
@@ -78,15 +72,13 @@ class _RecipePageState extends State<RecipePage> {
           ),
           actions: <Widget>[
             IconButton(
-              onPressed:
-                  // toggleBookmark,
-                  () {
+              onPressed: () {
                 context.read<BookmarkProvider>().bookmark(
                       recipeID: widget.clickedrecipe.id,
                       userId:
                           context.read<LoginProvider>().loginResponse.data!.id,
                     );
-                // toggleBookmark;
+
                 setState(() {
                   isBookmarked = !isBookmarked;
                 });
@@ -116,27 +108,57 @@ class _RecipePageState extends State<RecipePage> {
                             ? widget.clickedrecipe.imageURL!
                             : '${ApiConst.baseURL}' +
                                 widget.clickedrecipe.imageURL!,
-                        //height: 120,
-                        //fit: BoxFit.contain,
+                        fit: BoxFit.contain,
                       )
                     : const Icon(Icons.image_not_supported),
               ),
             ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
             SliverToBoxAdapter(
               //recipe name, description
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      const Text("Name of dish"),
-                      Text(widget.clickedrecipe.name),
-                      const Text("Description:"),
-                      Text(widget.clickedrecipe.description),
-                    ],
-                  )),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Name of dish:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: AppColor.textColor),
+                        ),
+                        Text(
+                          widget.clickedrecipe.name,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        const Text(
+                          "Description:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: AppColor.textColor),
+                        ),
+                        Text(widget.clickedrecipe.description,
+                            style: const TextStyle(fontSize: 15)),
+                      ],
+                    )),
+              ),
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
@@ -145,13 +167,22 @@ class _RecipePageState extends State<RecipePage> {
             ),
             SliverToBoxAdapter(
               //prepatation time
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Text(
+                    'Prep Time: ${widget.clickedrecipe.preptime.toString()} minutes',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: AppColor.textColor),
+                  ),
                 ),
-                child: Text(
-                    'Prep Time: ${widget.clickedrecipe.preptime.toString()} minutes'),
               ),
             ),
             const SliverToBoxAdapter(
@@ -164,23 +195,38 @@ class _RecipePageState extends State<RecipePage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
+                  //padding: const EdgeInsets.symmetric(horizontal: 3),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                   ),
                   child: Column(
-                    children: widget.clickedrecipe.ingredients
-                        .map((e) => Row(
-                              children: [
-                                Text(e.name),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Text(e.quantity),
-                              ],
-                            ))
-                        .toList(),
-                  ),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: const Text(
+                            "Ingredients",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: AppColor.textColor),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        ...widget.clickedrecipe.ingredients
+                            .map((e) => ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 10),
+                                  title: Row(
+                                    children: [
+                                      Expanded(child: Text(e.name)),
+                                      Expanded(child: Text(e.quantity)),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                      ]),
                 ),
               ),
             ),
@@ -192,34 +238,81 @@ class _RecipePageState extends State<RecipePage> {
             SliverToBoxAdapter(
               //instruction
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0),
                 child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
                     ),
-                    child: Column(
-                      children: widget.clickedrecipe.instruction
-                          .map((e) => Row(
-                                children: [
-                                  Text(e),
-                                ],
-                              ))
-                          .toList(),
+                    child: Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: const Text(
+                                "Instructions",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: AppColor.textColor),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            ...widget.clickedrecipe.instruction
+                                .map((e) => ListTile(
+                                      leading: const Icon(Icons.arrow_right),
+                                      title: Expanded(child: Text(e)),
+                                    ))
+                                .toList(),
+                          ]),
                     )),
               ),
             ),
+            const SliverToBoxAdapter(
+                child: SizedBox(
+              height: 10,
+            )),
             SliverToBoxAdapter(
               // rating
               child: Container(
-                margin: const EdgeInsets.only(left: 75),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
-                height: 200,
+                height: 180,
                 child: Rating(
                   recipeId: widget.clickedrecipe.id,
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Comment Section",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.secondary),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(left: 10),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Container(
+                      color: Colors.white,
+                      child: Text(
+                        _comments[index],
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  },
+                  childCount: _comments.length,
                 ),
               ),
             ),
@@ -242,39 +335,20 @@ class _RecipePageState extends State<RecipePage> {
                       recipeId: widget.clickedrecipe.id);
                   setState(() {
                     final comment = _commentController.text.trim();
-                    // final fullname = fullname.text();
+                    final fullname = context
+                        .read<LoginProvider>()
+                        .loginResponse
+                        .data!
+                        .fullname;
+
                     if (comment.isNotEmpty) {
-                      _comments.add('$comment');
+                      _comments.add('$fullname: $comment');
 
                       _commentController.clear();
                     }
-                  }
-                  );
+                  });
                 },
                 child: const Text('Post Comment'),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: Text(
-                "Comment Section",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.secondary),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 10),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Text(
-                      _comments[index],
-                      style: const TextStyle(fontSize: 18),
-                    );
-                  },
-                  childCount: _comments.length,
-                ),
               ),
             ),
           ],

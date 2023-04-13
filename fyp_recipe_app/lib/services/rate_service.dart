@@ -1,6 +1,5 @@
 import '../Network/api_const.dart';
 import '../models/rating_model.dart';
-import '../models/recipe_model.dart';
 import '../network/http_client.dart';
 
 class RateService {

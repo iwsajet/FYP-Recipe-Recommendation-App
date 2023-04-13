@@ -1,11 +1,7 @@
 
 
 import 'package:flutter/cupertino.dart';
-import 'package:fyp_recipe_app/models/recipe_model.dart';
-
 import 'package:fyp_recipe_app/network/http_client.dart';
-
-import '../models/rating_model.dart';
 import '../models/user_model.dart';
 import '../network/api_const.dart';
 
@@ -14,8 +10,9 @@ class AuthService {
 
   AuthService({required RecipeSearchHttpClient client}) {
     _client = client;
-  }
 
+  }
+RecipeSearchHttpClient get client => _client;
   Future<UserModel> login(
       {required String email, required String password}) async {
     final response = await _client.post(url: "${ApiConst.baseURL}logIn", body: {
@@ -35,9 +32,17 @@ class AuthService {
         url: "${ApiConst.baseURL}signUp",
         body: {'email': email, 'password': password, 'fullname': fullname});
 
-    debugPrint("response is $response");
+    print("response is $response");
   }
 
-
+ Future<UserModel> logout(
+      // {required String userId}
+      ) async {
+    final response = await _client.post(url: "${ApiConst.baseURL}logout", body: {
+    //'userId': userId,
+    });
+    print(response);
+    return UserModel.fromJson((response as Map<String, dynamic>)['user']);
+  }
 
 }

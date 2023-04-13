@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/custom_widget/sort_button.dart';
 import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
-import 'package:fyp_recipe_app/provider/sort_provider.dart';
 import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:provider/provider.dart';
 import '../custom_widget/search_bar.dart';
@@ -21,7 +20,7 @@ class _SearchResultState extends State<SearchResult> {
   @override
   void initState() {
     searchController = TextEditingController();
- 
+
     super.initState();
   }
 
@@ -35,8 +34,16 @@ class _SearchResultState extends State<SearchResult> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: SearchBarWidget(
-            searchController: searchController,
+          title: TextField(
+            controller: searchController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+            ),
+            onSubmitted: (String ingredientNames) {
+              context
+                  .read<GetSearchProvider>()
+                  .searchRecipe(ingredientNames: [ingredientNames]);
+            },
           ),
           actions: const <Widget>[SortByDropdown()],
         ),
@@ -50,11 +57,12 @@ class _SearchResultState extends State<SearchResult> {
                 debugPrint("imageurl is ${recipe.imageURL}");
                 return ListTile(
                   leading: SizedBox(
-                    height: 50,
-                    width: 50,
+                    height: 100,
+                    width: 100,
                     child: recipe.imageURL != null
                         ? Image.network(
                             recipe.imageURL!,
+                            fit: BoxFit.cover,
                           )
                         : const Icon(Icons.image_not_supported),
                   ),
@@ -62,8 +70,8 @@ class _SearchResultState extends State<SearchResult> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(recipe.recipeType),
-                      Text(recipe.description),
+                      Text('Type:${recipe.recipeType}'),
+                      Text('Description: ${recipe.description}'),
                       Text('Prep Time: ${recipe.preptime.toString()} minutes'),
                     ],
                   ),

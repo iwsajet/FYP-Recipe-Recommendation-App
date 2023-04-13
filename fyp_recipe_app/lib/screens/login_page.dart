@@ -6,8 +6,6 @@ import 'package:fyp_recipe_app/screens/home_page.dart';
 import 'package:fyp_recipe_app/screens/register_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
-
-import '../models/user_model.dart';
 import '../network/api_response.dart';
 
 class LoginPage extends StatefulWidget {
@@ -39,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
           content: Text(loginProvider.loginResponse.error.toString())));
     } else if (loginProvider.loginResponse.status == Status.success) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: ((context) => const HomePage())),
+          MaterialPageRoute(builder: ((context) => HomePage())),
           (route) => false);
     }
   }
@@ -49,13 +47,11 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    loginProvider.removeListener(loginListener);
     //loginProvider.dispose();
-    
-
   }
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
 
   void validate() {
     if (formkey.currentState!.validate()) {
@@ -93,15 +89,12 @@ class _LoginPageState extends State<LoginPage> {
                     key: formkey,
                     child: Column(
                       children: <Widget>[
-                        Container(
-                
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              color: AppColor.textColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                        const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: AppColor.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
                         Container(
@@ -166,6 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                                     email: _emailController.text,
                                     password: _passwordController.text);
                           },
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         const Text("Dont have an account?"),
                         TextButton(
