@@ -46,6 +46,7 @@ class _KebabMenuWidgetState extends State<KebabMenuWidget> {
   void dispose() {
     fullnameController.dispose();
     reportController.dispose();
+    reportProvider.removeListener(reportListner);
     super.dispose();
   }
 
@@ -62,8 +63,6 @@ class _KebabMenuWidgetState extends State<KebabMenuWidget> {
                 final result = await showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    
-
                     return AlertDialog(
                       title: const Text('Report'),
                       content: Column(

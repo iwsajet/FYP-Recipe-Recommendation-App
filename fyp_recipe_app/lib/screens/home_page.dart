@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )),
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SearchResult()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SearchResult()));
             },
           )),
           SliverToBoxAdapter(
@@ -119,7 +119,9 @@ class _HomePageState extends State<HomePage> {
                       (e) => GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const RecipeListView()));
+                              builder: (context) => RecipeListView(
+                                    type: e.title,
+                                  )));
                           context
                               .read<GetRecipeByTypeProvider>()
                               .getRecipebyType(keyword: e.title);

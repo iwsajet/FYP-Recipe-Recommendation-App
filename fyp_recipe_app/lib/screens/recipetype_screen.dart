@@ -3,11 +3,12 @@ import 'package:fyp_recipe_app/provider/recipe_type_provider.dart';
 import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:provider/provider.dart';
 
+import '../Network/api_const.dart';
 import '../network/api_response.dart';
 
 class RecipeListView extends StatefulWidget {
-  const RecipeListView({super.key});
-
+   RecipeListView({super.key, required this.type});
+late final String type;
   @override
   _RecipeListViewState createState() => _RecipeListViewState();
 }
@@ -17,7 +18,7 @@ class _RecipeListViewState extends State<RecipeListView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Recipes'),
+          title: Text(widget.type),
         ),
         body:
             Consumer<GetRecipeByTypeProvider>(builder: (context, value, child) {
@@ -35,7 +36,7 @@ class _RecipeListViewState extends State<RecipeListView> {
                         ? Image.network(
                             recipe.imageURL!.startsWith('http')
                                 ? recipe.imageURL!
-                                : 'http://192.168.1.124:3000' +
+                                : ApiConst.baseURL+
                                     recipe.imageURL!,
                             fit: BoxFit.cover,
                           )

@@ -5,6 +5,6 @@ class RateModel {
 
   factory RateModel.fromJson(Map<String, dynamic> map) {
     print(map);
-    return RateModel(recipeId: map['recpieId'], rating: map['rating']);
+    return RateModel(recipeId: map['recipeId'], rating: map['rating']);
   }
 }

@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
           content: Text(loginProvider.loginResponse.error.toString())));
     } else if (loginProvider.loginResponse.status == Status.success) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: ((context) => HomePage())),
+          MaterialPageRoute(builder: ((context) => const HomePage())),
           (route) => false);
     }
   }

@@ -15,12 +15,12 @@ class BookmarkProvider with ChangeNotifier {
       {required String recipeID, required String userId}) async {
     try {
       final response = await _bookmarkService.bookmarkRecipe(
-        recipeID: recipeID,
         userId: userId,
+        recipeID: recipeID,
       );
       bookmarkResponse = ApiResponse.success(null);
       notifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       bookmarkResponse = ApiResponse.error(e.toString());
       notifyListeners();
     }
@@ -34,11 +34,9 @@ class GetBookmarkProvider with ChangeNotifier {
     _bookmarkService = bookmarkService;
   }
   ApiResponse<List<RecipeModel>> getbookmarkResponse = ApiResponse.loading();
-  Future<void> getbookmark(
-      { required String userId}) async {
+  Future<void> getbookmark({required String userId}) async {
     try {
-      final response =
-          await _bookmarkService.getbookmarkRecipe( userId: userId);
+      final response = await _bookmarkService.getbookmarkRecipe(userId: userId);
       getbookmarkResponse = ApiResponse.success(response);
       notifyListeners();
     } catch (e) {

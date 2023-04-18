@@ -3,8 +3,6 @@ import 'package:fyp_recipe_app/custom_widget/sort_button.dart';
 import 'package:fyp_recipe_app/provider/get.search_results_provider.dart';
 import 'package:fyp_recipe_app/screens/recipe_page.dart';
 import 'package:provider/provider.dart';
-import '../custom_widget/search_bar.dart';
-
 import '../network/api_response.dart';
 
 class SearchResult extends StatefulWidget {

@@ -44,7 +44,7 @@ class _UserProfileState extends State<UserProfile>
     return Scaffold(
       bottomNavigationBar: const BottomNavBar(),
       body: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.only(top: 24),
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
@@ -94,14 +94,18 @@ class BookmarkContent extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             final recipe = recipes[index];
             return ListTile(
-              leading: recipe.imageURL != null
-                  ? Image.network(
-                      recipe.imageURL!.startsWith('http')
-                          ? recipe.imageURL!
-                          : 'http://192.168.1.56:3000' + recipe.imageURL!,
-                      fit: BoxFit.cover,
-                    )
-                  : const Icon(Icons.image_not_supported),
+              leading: SizedBox(
+                width: 100,
+                height: 100,
+                child: recipe.imageURL != null
+                    ? Image.network(
+                        recipe.imageURL!.startsWith('http')
+                            ? recipe.imageURL!
+                            : 'http://192.168.1.56:3000' + recipe.imageURL!,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(Icons.image_not_supported),
+              ),
               title: Text(recipe.name),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,12 +151,15 @@ class PostContent extends StatelessWidget {
             final recipe = recipes[index];
             return ListTile(
               leading: SizedBox(
-                height: 50,
-                width: 50,
+                height: 100,
+                width: 100,
                 child: recipe.imageURL != null
-                    ? Image.network(recipe.imageURL!.startsWith('http')
-                        ? recipe.imageURL!
-                        : '${ApiConst.baseURL}' + recipe.imageURL!)
+                    ? Image.network(
+                        recipe.imageURL!.startsWith('http')
+                            ? recipe.imageURL!
+                            : '${ApiConst.baseURL}' + recipe.imageURL!,
+                        fit: BoxFit.cover,
+                      )
                     : const Icon(Icons.image_not_supported),
               ),
               title: Text(recipe.name),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp_recipe_app/network/api_response.dart';
 import '../services/auth_service.dart';
 
-
 class SignUpProvider with ChangeNotifier {
   late final AuthService _authService;
 
@@ -24,7 +23,6 @@ class SignUpProvider with ChangeNotifier {
         password: password,
         fullname: fullname
       );
-
       apiResponse = ApiResponse.success(null);
       notifyListeners();
     } catch (e) {

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_recipe_app/app_properties.dart';
 import 'package:fyp_recipe_app/custom_widget/top_bar.dart';
 import 'package:fyp_recipe_app/provider/login_provider.dart';
 import 'package:fyp_recipe_app/provider/post_recipe_provider.dart';
@@ -11,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:http/http.dart' as http;
+import '../Network/api_const.dart';
 import '../custom_widget/ingredient_row.dart';
 import '../models/ingredient_model.dart';
 import '../network/api_response.dart';
@@ -98,7 +100,7 @@ class _PostRecipeState extends State<PostRecipe> {
       // Show error messageif fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please fill in all the required fields.'),
+          content: Text('Please fill all the required fields.'),
         ),
       );
       return;
@@ -121,9 +123,10 @@ class _PostRecipeState extends State<PostRecipe> {
       try {
         final bytes = await pickedImage!.readAsBytes();
 
-        final uri = Uri.parse('http://192.168.1.56:3000/postRecipe');
+        final uri = Uri.parse('${ApiConst.baseURL}postRecipe');
         final request = http.MultipartRequest('POST', uri);
         request.fields['userId'] =
+            // ignore: use_build_context_synchronously
             context.read<LoginProvider>().loginResponse.data!.id;
         request.fields['name'] = name;
         request.fields['type'] = recipeType;
@@ -142,20 +145,21 @@ class _PostRecipeState extends State<PostRecipe> {
         final response = await request.send();
 
         log(await response.stream.bytesToString());
+        // ignore: await_only_futures
         log(await response.statusCode.toString());
 
         if (response.statusCode == 200) {
           // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Recipe added successfully.'),
+              content: Text('Recipe posted successfully.'),
             ),
           );
         } else {
           // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Recipe addition failed.'),
+              content: Text('Recipe post failed.'),
             ),
           );
         }
@@ -258,12 +262,28 @@ class _PostRecipeState extends State<PostRecipe> {
                         controller: descriptionController,
                         decoration:
                             const InputDecoration(labelText: "Description"),
-                        maxLength: 300),
-                    IconButton(
-                        onPressed: () {
-                          onAdd();
-                        },
-                        icon: const Icon(Icons.add)),
+                        maxLength: 150),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Add ingredients:",
+                          style: TextStyle(
+                            color: AppColor.textColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              onAdd();
+                            },
+                            icon: const Icon(
+                              Icons.add,
+                              color: AppColor.secondary,
+                              size: 30,
+                            )),
+                      ],
+                    ),
                     ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

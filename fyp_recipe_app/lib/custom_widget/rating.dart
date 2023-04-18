@@ -22,8 +22,8 @@ class _RatingState extends State<Rating> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(ratingProvider.rateResponse.error.toString())));
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Rating has been sent.")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Rating has been sent sucessfully.")));
     }
   }
 

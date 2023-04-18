@@ -52,6 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _fullnameController.dispose();
     _usernameController.dispose();
    // signUpProvider.dispose();
+   signUpProvider.removeListener(signUpListner);
 
     super.dispose();
   }
@@ -82,7 +83,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   margin: const EdgeInsets.only(
                       top: 120, left: AppSizes.s20, right: AppSizes.s20),
                   height: MediaQuery.of(context).size.height / 1.3,
-                  //width: MediaQuery.of(context).size.height / 2.5,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.white,

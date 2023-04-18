@@ -19,6 +19,7 @@ class IngredientFormItemWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
+    // ignore: no_logic_in_create_state
     return state;
   }
 

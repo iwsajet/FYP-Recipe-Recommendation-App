@@ -1,7 +1,7 @@
 import '../Network/api_const.dart';
 import '../models/rating_model.dart';
 import '../network/http_client.dart';
-
+import 'package:mongo_dart/mongo_dart.dart';
 class RateService {
   late final RecipeSearchHttpClient _client;
 
@@ -13,7 +13,7 @@ class RateService {
       {required String recipeId, required double rating}) async {
     final response = await _client.post(
       url: "${ApiConst.baseURL}recipe/$recipeId/ratings",
-      body: {'recipeId': recipeId, 'rating': rating},
+      body: {'recipeId': ObjectId.fromHexString(recipeId), 'rating': rating},
     );
 
     return RateModel.fromJson(response);
