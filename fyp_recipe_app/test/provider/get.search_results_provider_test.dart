@@ -46,13 +46,10 @@ void main() {
     test(
         'searchRecipe() should get getSearchResponse as ApSiResponse.success with RecipeModel data on successful search',
         () async {
-   
       const ingredientNames = ['ingredient1', 'ingredient2'];
 
-      
       await searchProvider.searchRecipe(ingredientNames: ingredientNames);
 
-     
       expect(searchProvider.getSearchResponse.status, equals(Status.success));
       expect(searchProvider.getSearchResponse.data, isA<List<RecipeModel>>());
       expect(searchProvider.getSearchResponse.data?.length, equals(1));
@@ -64,13 +61,10 @@ void main() {
     test(
         'searchRecipe() should get getSearchResponse as ApiResponse.error on failed search',
         () async {
-     
       const ingredientNames = ['ingredient1', 'ingredient3'];
 
-     
       await searchProvider.searchRecipe(ingredientNames: ingredientNames);
 
-     
       expect(searchProvider.getSearchResponse.status, equals(Status.error));
       expect(searchProvider.getSearchResponse.data, isNull);
       expect(searchProvider.getSearchResponse.error, isNotNull);
